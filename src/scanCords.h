@@ -1,8 +1,9 @@
-
+// Struct for mines
 typedef struct
 {
     unsigned int x;
     unsigned int y;
 }mine_s;
 
-void coordinatesScanInit(mine_s mines[]);
+// Prototype for function
+void coordinatesScanInit(mine_s *mines, char *filnavn);
