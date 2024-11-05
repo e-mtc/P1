@@ -4,7 +4,7 @@ FUNKTIONERE GØR KUN 1 TING :)
 Case: camelCase
 
 Egne objekter: 
-Type defineres efter med (_'typeforkortelse')
+Type defineres efter med (_'typeforkortelse') - _s for structs og _e for enums
 Egne objekter starter med stort
 Makroer defineres i fuld caps
 
