@@ -43,7 +43,7 @@ void kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
 
     printf(
         "Following are the edges in the constructed MST\n");
-    for (int i = 0; i < paths; i++) {
+    for (int i = 0; i < paths; ++i) {
         int v1 = findParent(parent, sortedArray[i][0]);
         int v2 = findParent(parent, sortedArray[i][1]);
         int wt = sortedArray[i][2];
@@ -65,7 +65,7 @@ void kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
 // Initialization of parent[] and rank[] arrays
 void makeSet(int parent[], int rank[], int n)
 {
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; ++i) {
         parent[i] = i;
         rank[i] = 0;
     }
