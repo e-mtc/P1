@@ -22,7 +22,7 @@ double calculateLength(Mines mine1, Mines mine2) {
 }
 
 
-Mines **allCombinations(Mines *mines, unsigned int arraySize) {
+Mines **allCombinations(const Mines *mines, unsigned int arraySize) {
     // array over arrays of paths. Size of the arraypointer times the amount of arrays
     Mines **listOfPaths = (Mines **)malloc(factorial(arraySize) * sizeof(Mines *));
     // check if malloc was a succes
@@ -41,8 +41,9 @@ Mines **allCombinations(Mines *mines, unsigned int arraySize) {
     return listOfPaths;
 }   
 
-void findPaths(Mines **listOfPaths, Mines *mines, Mines *path, unsigned int depth, unsigned int arraySize, unsigned int *currentArray) {
-    if (depth == arraySize) {
+void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned int depth, unsigned int arraySize, unsigned int *currentArray) {
+    // depth starts at zero so arraySize - 1
+    if (depth == arraySize - 1) {
         // make space for this path in the list of all paths
         listOfPaths[*currentArray] = (Mines *)malloc(arraySize * sizeof(Mines)); 
         if (listOfPaths[*currentArray] == NULL) { // check if allocation was succesfull
