@@ -41,7 +41,7 @@ Mines **allCombinations(const Mines *mines, unsigned int arraySize) {
     return listOfPaths;
 }   
 
-void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned int depth, unsigned int arraySize, unsigned int *currentArray) {
+void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray) {
     // depth starts at zero so arraySize - 1
     if (depth == arraySize - 1) {
         // make space for this path in the list of all paths
@@ -73,7 +73,7 @@ void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned in
             if (j == i) continue;
             remainingMines[mineNr++] = mines[j];
         }
-        findPaths(listOfPaths, remainingMines, path, depth + 1, arraySize - depth - 1, currentArray); 
+        findPaths(listOfPaths, remainingMines, path, depth + 1, arraySize, currentArray); 
         free(remainingMines);
     }
 }
