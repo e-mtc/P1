@@ -17,7 +17,6 @@ int main (void) {
             mine[i].y = i;
     }
 
-
     VisualOutput(7, 10, mine);
 
 }
