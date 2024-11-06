@@ -33,7 +33,7 @@ Mines **allCombinations(Mines *mines, unsigned int arraySize) {
     if (currentPath == NULL) exit(EXIT_FAILURE);
     for (unsigned int i = 0; i < arraySize; i++)
         currentPath[i] = mines[i];
-    // currentPath will be a var for keeping track of which mines that have already been meetj 
+    // currentPath will be a var for keeping track of which mines that have already been met 
     unsigned int idx = 0;
     findPaths(listOfPaths, mines, currentPath, 0, arraySize, &idx);
     // the current path isnt needed any more only the list of mine fields
@@ -67,11 +67,12 @@ void findPaths(Mines **listOfPaths, Mines *mines, Mines *path, unsigned int dept
             exit(EXIT_FAILURE);
         }
         // copy mines over in remaining mines but not the one already in the path
+        int mineNr = 0;
         for (unsigned int j = 0; j < arraySize - depth - 1; j++) { 
             if (j == i) continue;
-            remainingMines[j] = mines[j];
+            remainingMines[mineNr++] = mines[j];
         }
-        findPaths(listOfPaths, remainingMines, path, depth+1, arraySize - depth - 1, currentArray); 
+        findPaths(listOfPaths, remainingMines, path, depth + 1, arraySize - depth - 1, currentArray); 
         free(remainingMines);
     }
 }
