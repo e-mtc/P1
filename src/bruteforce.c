@@ -37,7 +37,7 @@ Mines **allCombinations(Mines *mines, unsigned int arraySize) {
     unsigned int idx = 0;
     findPaths(listOfPaths, mines, currentPath, 0, arraySize, &idx);
     // the current path isnt needed any more only the list of mine fields
-    //free(currentPath);
+    free(currentPath);
     return listOfPaths;
 }   
 
@@ -61,17 +61,17 @@ void findPaths(Mines **listOfPaths, Mines *mines, Mines *path, unsigned int dept
     for (unsigned int i = 0; i < arraySize - depth; i++) {
         // allocate space for remaining mines of each path
         path[depth] = mines[i];
-        Mines *remainingMines = (Mines *)malloc(sizeof(Mines) * arraySize - depth - 1);
+        Mines *remainingMines = (Mines *)malloc(sizeof(Mines) * (arraySize - depth - 1));
         if (remainingMines == NULL) {
             fprintf(stderr, "remainingMines allocation failed");
             exit(EXIT_FAILURE);
         }
         // copy mines over in remaining mines but not the one already in the path
-        for (unsigned int j = 0; j > arraySize - depth - 1; j++) { 
+        for (unsigned int j = 0; j < arraySize - depth - 1; j++) { 
             if (j == i) continue;
             remainingMines[j] = mines[j];
         }
-        findPaths(listOfPaths, remainingMines, path, depth+1, arraySize - depth - 1, currentArray + 1); 
+        findPaths(listOfPaths, remainingMines, path, depth+1, arraySize - depth - 1, currentArray); 
         free(remainingMines);
     }
 }
