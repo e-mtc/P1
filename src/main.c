@@ -1,0 +1,18 @@
+#include "LowBoundTSP.h"
+
+int main(void){
+    int size = 5;
+
+    int test[][VALUES] = {   { 0, 1, 10 },
+                       { 0, 2, 6 },
+                       { 0, 3, 5 },
+                       { 1, 3, 15 },
+                       { 2, 3, 4 } };
+
+
+
+    makeMST(size, test);
+
+
+    return 0;
+}

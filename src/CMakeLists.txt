@@ -1,0 +1,1 @@
+add_executable(LowBoundTSP main.c LowBoundTSP.c)
