@@ -57,8 +57,6 @@ void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned in
             listOfPaths[*currentArray][i] = path[i];
         // update the amount of paths found
         (*currentArray)++;
-        // path found so dont do anything in this path 
-        return;
     }
     
     for (unsigned int i = 0; i < arraySize - depth; i++) {
