@@ -50,8 +50,10 @@ void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned in
             fprintf(stderr, "list of paths allocation failed");
             exit(EXIT_FAILURE);
         }
+        // forgot to set last mines
+        path[depth] = mines[0];
         // saved the found path
-        for (unsigned int i = 0; i < arraySize; i++) 
+        for (unsigned int i = 0; i < arraySize; i++)  
             listOfPaths[*currentArray][i] = path[i];
         // update the amount of paths found
         (*currentArray)++;
@@ -69,7 +71,8 @@ void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned in
         }
         // copy mines over in remaining mines but not the one already in the path
         int mineNr = 0;
-        for (unsigned int j = 0; j < arraySize - depth - 1; j++) { 
+        // forgot: still need to loop through entire mines because the skip makes it -1
+        for (unsigned int j = 0; j < arraySize - depth; j++) { 
             if (j == i) continue;
             remainingMines[mineNr++] = mines[j];
         }
