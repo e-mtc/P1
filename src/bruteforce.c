@@ -45,7 +45,8 @@ void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned in
     if (depth == arraySize - 1) {
         // make space for this path in the list of all paths
         listOfPaths[*currentArray] = (Mines *)malloc(arraySize * sizeof(Mines)); 
-        if (listOfPaths[*currentArray] == NULL) { // check if allocation was succesfull
+        // check if allocation was succesfull
+        if (listOfPaths[*currentArray] == NULL) {
             fprintf(stderr, "list of paths allocation failed");
             exit(EXIT_FAILURE);
         }
