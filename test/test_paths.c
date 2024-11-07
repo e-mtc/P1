@@ -6,6 +6,7 @@
 
 void test3Mines();
 void testPathLength();
+void testFactorial();
 
 int main(void) {
 
@@ -17,7 +18,7 @@ int main(void) {
 void test3Mines() {
     Mines mineList[THREEMINES] = { {1,1}, {2,2}, {3,3} }; 
     
-    Mines **paths = allCombinations(mineList, THREEMINES);
+    Mines **paths = getPaths(mineList, THREEMINES);
 
     assert(paths != NULL);
 
@@ -54,4 +55,11 @@ void testPathLength() {
     double length = pathLength(mineList, 3);
     
     assert(2.8 <= length && length <= 2.9);
+}
+void testFactorial() {
+    int result,
+        number = 10;
+
+    result = factorial(number);
+    assert(result == 3628800);
 }

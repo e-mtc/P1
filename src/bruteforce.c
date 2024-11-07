@@ -3,10 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-
-
-
 Mines *getShortestPath(const Mines *mines, unsigned int arraySize) {
     // gets every combination 
     Mines **paths = getPaths(mines, arraySize);
@@ -46,6 +42,7 @@ Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned i
     return shortestRoute;    
 }
 
+// TODO make it so every path leads back to the starting one
 Mines **getPaths(const Mines *mines, unsigned int arraySize) {
     // array over arrays of paths. Size of the arraypointer times the amount of arrays
     Mines **listOfPaths = (Mines **)malloc(factorial(arraySize) * sizeof(Mines *));
@@ -62,7 +59,6 @@ Mines **getPaths(const Mines *mines, unsigned int arraySize) {
     return listOfPaths;
 }   
 
-// TODO make it so every path leads back to the starting one
 void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray) {
     // depth starts at zero so arraySize - 1
     if (depth == arraySize - 1) {
