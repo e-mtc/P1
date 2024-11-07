@@ -86,6 +86,19 @@ double pathLength(const Mines *path, unsigned int arraySize) {
     return length;
 }
 
+// @return shortest paths through a minefield 
+Mines *getShortestPath(const Mines *mines, unsigned int arraySize) {
+    Mines **paths = allCombinations(mines, arraySize);
+    if (paths == NULL) return NULL;
+    for (unsigned int idx = 0; idx < arraySize; idx++) 
+        if (paths[idx] == NULL) return NULL;
+
+    unsigned int numberOfPaths = factorial(arraySize);
+
+    Mines *shortestPatht = shortestPath(paths, numberOfPaths, arraySize);
+
+    return shortestPatht;
+}
 
 Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned int arraySize) {
     Mines *shortestRoute = (Mines *)malloc(sizeof(Mines) * arraySize);
@@ -104,7 +117,7 @@ Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned i
     }
 
     for (unsigned int idx = 0; idx < arraySize; idx++)
-         shortestRoute[idx] = minefields[test][idx];
+         shortestRoute[idx] = minefields[shrtpth][idx];
     return shortestRoute;    
 }
 

@@ -14,5 +14,6 @@ Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned i
 
 double pathLength(const Mines *path, unsigned int arraySize);
 
+Mines *getShortestPath(const Mines *mines, unsigned int arraySize);
 
 unsigned int factorial(unsigned int num); 
