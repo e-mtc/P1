@@ -1,4 +1,4 @@
 add_library(scanCords scanCords.c)
 
-add_executable(program main.c)
-target_link_libraries(program scanCords)
+add_executable(main main.c)
+target_link_libraries(main scanCords)
