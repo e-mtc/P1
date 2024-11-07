@@ -2,11 +2,11 @@
 // Created by ramoj on 05/11/2024.
 //
 
-#include "VisualOutput.h"
+#include  "VisualOutput.h"
 #include <stdio.h>
 
 
-int main (void) {
+/*int main (void) {
     // Simulates a struct of mines with x and y coordinates. So 1.1, 2.2, 3.3, 4.4, 5.5 ... i,j is based on n.
     // Struct is in header file.
     int n = 7;
@@ -19,7 +19,7 @@ int main (void) {
 
     VisualOutput(7, 10, mine);
 
-}
+}*/
 
 
 void VisualOutput(int row, int column, const struct input input[]) {

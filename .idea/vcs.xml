@@ -2,5 +2,31 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../handin-1-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../handin-2-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../handin-3-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../handin-4-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-1-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-10-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-10-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-11-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-11-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-2-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-2-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-3-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-3-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-4-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-4-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-5-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-5-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-6-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-6-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-7-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-7-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-8-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-8-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-9-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../lecture-9-live-Ramojuul" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../project-1-Ramojuul" vcs="Git" />
   </component>
 </project>
