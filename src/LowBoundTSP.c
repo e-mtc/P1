@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 //Sorts the array
-void BubbleSort(int paths, int a[paths][VALUES]){
+void bubbleSort(int paths, int a[paths][VALUES]){
     //Temporary values are intialized
     int tempSource, tempDestination, tempWeight;
 
@@ -35,22 +35,19 @@ void kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
     int parent[paths];
     int rank[paths];
 
-    // Function to initialize parent[] and rank[]
+    //Function to initialize parent[] and rank[]
     makeSet(parent, rank, paths);
 
-    // To store the minimun cost
+    //To store the minimun cost
     int minCost = 0;
 
-    printf(
-        "Following are the edges in the constructed MST\n");
+    printf("Following are the edges in the constructed MST\n");
     for (int i = 0; i < paths; ++i) {
         int v1 = findParent(parent, sortedArray[i][0]);
         int v2 = findParent(parent, sortedArray[i][1]);
         int wt = sortedArray[i][2];
 
-        // If the parents are different that
-        // means they are in different sets so
-        // union them
+        //If the parents are different that means they are in different sets so we union them
         if (v1 != v2) {
             unionSet(v1, v2, parent, rank);
             minCost += wt;
@@ -62,7 +59,7 @@ void kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
     printf("Minimum Cost Spanning Tree: %d\n", minCost);
 }
 
-// Initialization of parent[] and rank[] arrays
+//Initialization of arrays for later use
 void makeSet(int parent[], int rank[], int n)
 {
     for (int i = 0; i < n; ++i) {
@@ -71,7 +68,7 @@ void makeSet(int parent[], int rank[], int n)
     }
 }
 
-// Function to find the parent of a node
+//Function to find the parent of a node
 int findParent(int parent[], int component)
 {
     if (parent[component] == component)
@@ -81,10 +78,10 @@ int findParent(int parent[], int component)
            = findParent(parent, parent[component]);
 }
 
-// Function to unite two sets
+//Function to unite two sets
 void unionSet(int u, int v, int parent[], int rank[])
 {
-    // Finding the parents
+    //Finding the parents
     u = findParent(parent, u);
     v = findParent(parent, v);
 
@@ -96,9 +93,7 @@ void unionSet(int u, int v, int parent[], int rank[])
     }
     else {
         parent[v] = u;
-
-        // Since the rank increases if
-        // the ranks of two sets are same
+        //Since the rank increases if the ranks of two sets are same
         rank[u]++;
     }
 }
@@ -107,7 +102,7 @@ void unionSet(int u, int v, int parent[], int rank[])
 //Finds the minimum spanning tree to later be used in christofides to make an effecient route
 void makeMST(int paths, int travelArray[paths][VALUES]){
     //First we sort the array of possible travelpoints so that we can access the minimum distance-costs
-    BubbleSort(paths, travelArray);
+    bubbleSort(paths, travelArray);
 
     //We then apply our sorted array to our kruskal algorithm to get a MST
     kruskalAlgo(paths, travelArray);
@@ -116,4 +111,23 @@ void makeMST(int paths, int travelArray[paths][VALUES]){
 
 
 
+void christofidesTSP(int paths, int travelArray[][VALUES]){
 
+    //First step is creating a minimum spanning tree
+    makeMST(paths, travelArray);
+
+    //Second step is creating a subgraph of odd-degree vertices in the MST
+    makeSubgraph(travelArray);
+
+    //Third step is calculating 'M?' - a minimum-weight perfect matching on the subgraph
+    makeMinimumW(subgraph);
+
+    //Create new path(Graph) 'Temporary?' by combining the edges/paths in M and the MST
+    makePathTemp(subgraph, travelArray);
+
+    //Create an euler tour around the new path X -- 'E?'
+    createE(pathTemp);
+
+    //Remove twice visited paths in E and replace while still maintaining a cycle of paths
+    makeTSP(E);
+}

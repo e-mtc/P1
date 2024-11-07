@@ -1,7 +1,9 @@
 #include "LowBoundTSP.h"
 
 int main(void){
-    int size = 5;
+
+    int paths = 5;
+
 
     int test[][VALUES] = {   { 0, 1, 10 },
                        { 0, 2, 6 },
@@ -11,7 +13,7 @@ int main(void){
 
 
 
-    makeMST(size, test);
+    christofidesTSP(paths, test);
 
 
     return 0;
