@@ -29,7 +29,7 @@ Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned i
     }
     unsigned int shortestPath = pathLength(minefields[0], arraySize);
     unsigned int temp = 0;
-    unsigned int shrtpth;
+    unsigned int shrtpth = 0;
 
     for (unsigned int i = 1; i < minefieldscount; i++) {
         temp = pathLength(minefields[i], arraySize);
