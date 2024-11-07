@@ -5,10 +5,12 @@
 #define THREEMINES 3
 
 void test3Mines();
+void testPathLength();
 
 int main(void) {
 
     test3Mines();
+    testPathLength();
     return 0;
 }
 
@@ -47,3 +49,9 @@ void test3Mines() {
     assert(paths[5][2].x == 1 && paths[5][2].y == 1);
 }
 
+void testPathLength() {
+    Mines mineList[THREEMINES] = { {1,1}, {2,2}, {3,3} }; 
+    double length = pathLength(mineList, 3);
+    
+    assert(2.8 <= length && length <= 2.9);
+}
