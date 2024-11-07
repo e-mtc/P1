@@ -6,7 +6,7 @@ typedef struct {
 
 double calculateLength(Mines mine1, Mines mine2);
 
-Mines **allCombinations(const Mines *mines, unsigned int arrSize);
+Mines **getPaths(const Mines *mines, unsigned int arrSize);
 
 void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray);
 
