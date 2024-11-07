@@ -79,6 +79,36 @@ void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned in
     }
 }
 
+double pathLength(const Mines *path, unsigned int arraySize) {
+    double length = 0;
+    for (unsigned int idx = 1; idx < arraySize; idx++) 
+        length += calculateLength(path[idx - 1], path[idx]); 
+    return length;
+}
+
+
+Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned int arraySize) {
+    Mines *shortestRoute = (Mines *)malloc(sizeof(Mines) * arraySize);
+    if (shortestRoute == NULL) {
+        fprintf(stderr, "shortestRoute allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    unsigned int shortestPath = pathLength(minefields[0], arraySize);
+    unsigned int temp = 0;
+    unsigned int shrtpth;
+
+    for (unsigned int i = 1; i < minefieldscount; i++) {
+        temp = pathLength(minefields[i], arraySize);
+        if (temp < shortestPath) 
+            shrtpth = i;
+    }
+
+    for (unsigned int idx = 0; idx < arraySize; idx++)
+         shortestRoute[idx] = minefields[test][idx];
+    return shortestRoute;    
+}
+
+
 unsigned int factorial(unsigned int num) {
     unsigned int fact = 1;
     for (unsigned int i = 1; i <= num; i++) {
