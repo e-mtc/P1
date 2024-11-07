@@ -27,14 +27,16 @@ Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned i
         fprintf(stderr, "shortestRoute allocation failed");
         exit(EXIT_FAILURE);
     }
-    unsigned int shortestPath = pathLength(minefields[0], arraySize);
-    unsigned int temp = 0;
+    double shortestPath = pathLength(minefields[0], arraySize);
+    double temp = 0;
     unsigned int shrtpth = 0;
 
     for (unsigned int i = 1; i < minefieldscount; i++) {
         temp = pathLength(minefields[i], arraySize);
-        if (temp < shortestPath) 
+        if (temp < shortestPath) {
             shrtpth = i;
+            shortestPath = temp;
+        }
     }
 
     for (unsigned int idx = 0; idx < arraySize; idx++)
@@ -99,6 +101,8 @@ void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned in
 }
 
 double pathLength(const Mines *path, unsigned int arraySize) {
+    // the path must include 2 mines or this function will reference a non-existing element
+    if (arraySize < 2) return 0;
     // variable that stores the length of the path
     double length = 0;
     // calculate the length of the entire path
