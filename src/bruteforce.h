@@ -9,7 +9,7 @@ typedef struct {
  * @param arraySize the number of mines in the minefield
  * @return returns an array of the shortest path through the minefield
  */
-Mines *getShortestPath(const Mines *mines, unsigned int arraySize);
+Mines *getShortestPath(Mines *mines, unsigned int arraySize);
 
 /*
  * @param
@@ -24,7 +24,7 @@ Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned i
  * @param arraySize   the amount of mines in a minefield
  * @return a list of every path (2D array) 
  */
-Mines **getPaths(const Mines *mines, unsigned int arraySize);
+void **getPaths(void *elements, unsigned int elementSize, unsigned int arraySize);
 
 /*
  * @param listOfPaths     2D list of possible paths
@@ -35,7 +35,7 @@ Mines **getPaths(const Mines *mines, unsigned int arraySize);
  * @param currentArray    keeps track of how many paths have been found
  * @return void - changes values of listOfPaths
  */
-void findPaths(Mines **listOfPaths, const Mines *mines, Mines *path, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray);
+void findPaths(void **listOfPaths, const void *elements, void *path, unsigned int elementSize, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray);
 
 /*
  * @param path       array of mines in path
