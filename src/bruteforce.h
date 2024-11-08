@@ -9,7 +9,7 @@ typedef struct {
  * @param arraySize the number of mines in the minefield
  * @return returns an array of the shortest path through the minefield
  */
-Mines *getShortestPath(const Mines *mines, unsigned int arraySize);
+Mines *getShortestPath(Mines *mines, unsigned int arraySize);
 
 /*
  * @param

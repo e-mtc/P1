@@ -5,10 +5,10 @@
 
 #include <string.h>
 
-/*
-Mines *getShortestPath(const Mines *mines, unsigned int arraySize) {
+
+Mines *getShortestPath(Mines *mines, unsigned int arraySize) {
     // gets every combination 
-    Mines **paths = getPaths(mines, arraySize);
+    Mines **paths = (Mines **)getPaths(mines, sizeof(Mines), arraySize);
     // check if paths is empty:
     if (paths == NULL) return NULL;
     for (unsigned int idx = 0; idx < arraySize; idx++) 
@@ -44,7 +44,6 @@ Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned i
          shortestRoute[idx] = minefields[shrtpth][idx];
     return shortestRoute;    
 }
-*/
 
 void **getPaths(void *elements, unsigned int elementSize, unsigned int arraySize) {
     unsigned int combinations = factorial(arraySize);
