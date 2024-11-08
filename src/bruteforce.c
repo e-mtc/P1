@@ -55,7 +55,7 @@ void **getPaths(void *elements, unsigned int elementSize, unsigned int arraySize
     void *currentPath = (void *)malloc(elementSize * arraySize);
     if (currentPath == NULL) fprintf(stderr, "currentPath err");
 
-    int idx = 0;
+    unsigned int idx = 0;
     findPaths(paths, elements, currentPath, elementSize, 0, arraySize, &idx);
     
     free(currentPath);
@@ -72,26 +72,22 @@ void findPaths(void **listOfPaths, const void *elements, void *path, unsigned in
         (*currentArray)++;
     }            
     
-    // difficulty copying only path of array
-    // Maybe try:
-    // use memcpy -> typecast to (char *) * elementSize = to move one element in array
     for (unsigned int i = 0; i < arraySize - depth; i++) {
-        path[depth] = elements[i];
+        memcpy((char *)path + (depth * elementSize), (char *)elements + (i * elementSize), elementSize);
 
         void *remainingElements = (void *)malloc(elementSize * (arraySize - depth - 1));
         if (remainingElements == NULL) fprintf(stderr, "remainingElements err");
 
-        int elementNr = 0;
+        unsigned int elementNr = 0;
         for (unsigned int j = 0; j < arraySize - depth; j++) {
             if (j == i) continue;
-            remainingElements[elementNr++] = elements[j];
+            memcpy((char *)remainingElements + (elementNr++ * elementSize), (char *)elements + (j * elementSize), elementSize);
         }
 
         findPaths(listOfPaths, remainingElements, path, elementSize, depth + 1, arraySize, currentArray);
         free(remainingElements);
     }
 }
-
 
 double pathLength(const Mines *path, unsigned int arraySize) {
     // variable that stores the length of the path
