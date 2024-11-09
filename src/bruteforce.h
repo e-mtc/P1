@@ -5,9 +5,9 @@ typedef struct {
 } Mines;
 
 /* 
- * @param mines the list of the mines in the minefield
+ * @param mines     the list of the mines in the minefield - the first mine in the array will be the first in the path and the last in the array will be the last in the array
  * @param arraySize the number of mines in the minefield
- * @return returns an array of the shortest path through the minefield
+ * @return returns  an array of the shortest path through the minefield
  */
 Mines *getShortestPath(Mines *mines, unsigned int arraySize);
 

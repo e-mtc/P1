@@ -9,81 +9,98 @@
 Mines *getShortestPath(Mines *mines, unsigned int arraySize) {
     // gets every combination 
     Mines **paths = (Mines **)getPaths(mines, sizeof(Mines), arraySize);
-    // check if paths is empty:
     if (paths == NULL) return NULL;
     for (unsigned int idx = 0; idx < arraySize; idx++) 
         if (paths[idx] == NULL) return NULL;
-    // -----------------------
+
     // calculate the number of possible paths
-    unsigned int numberOfPaths = factorial(arraySize);
     // calculate the shortestPath and store the result
+    unsigned int numberOfPaths = factorial(arraySize - 2);
     Mines *result = shortestPath(paths, numberOfPaths, arraySize);
-    // check if result is empty
     if (result == NULL) return NULL;
+
     // return the result = shortest path through the minefield
     return result;
 }
 
-Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned int arraySize) {
-    Mines *shortestRoute = (Mines *)malloc(sizeof(Mines) * arraySize);
-    if (shortestRoute == NULL) {
-        fprintf(stderr, "shortestRoute allocation failed");
-        exit(EXIT_FAILURE);
-    }
-    double shortestPath = pathLength(minefields[0], arraySize);
+Mines *shortestPath(Mines **paths, unsigned int minefieldscount, unsigned int arraySize) {
+    // variables for path number, the length of the shortest path and a temporary value
+    unsigned int pathNr = 0;
+    double shortest = pathLength(paths[0], arraySize);
     double temp = 0;
-    unsigned int shrtpth = 0;
 
+    // calculate the length of each path and save the shortest (or one of them)
     for (unsigned int i = 1; i < minefieldscount; i++) {
-        temp = pathLength(minefields[i], arraySize);
-        if (temp < shortestPath) { 
-            shrtpth = i;
-            shortestPath = temp;
+        temp = pathLength(paths[i], arraySize);
+
+        if (temp < shortest) { 
+            pathNr = i;
+            shortest = temp;
         }
     }
 
-    for (unsigned int idx = 0; idx < arraySize; idx++)
-         shortestRoute[idx] = minefields[shrtpth][idx];
-    return shortestRoute;    
+    // return the path that results in the shortest path
+    return paths[pathNr];    
 }
 
 void **getPaths(void *elements, unsigned int elementSize, unsigned int arraySize) {
-    unsigned int combinations = factorial(arraySize);
-
+    // calculate and allocate memory for every kind of combinations of paths
+    // -2 because the first and last element should always be the same
+    unsigned int combinations = factorial(arraySize - 2);  
     void **paths = (void **)malloc(sizeof(void *) * combinations);
     if (paths == NULL) fprintf(stderr, "paths err");
 
+    // allocate memory for keeping track of current path
     void *currentPath = (void *)malloc(elementSize * arraySize);
     if (currentPath == NULL) fprintf(stderr, "currentPath err");
 
+    // keep tracking of how many paths have been found (idx) 
+    // and call the recursive function (findPaths)
     unsigned int idx = 0;
     findPaths(paths, elements, currentPath, elementSize, 0, arraySize, &idx);
     
+    // free unused memory
     free(currentPath);
+
     return paths;
 }   
 
-void findPaths(void **listOfPaths, const void *elements, void *path, unsigned int elementSize, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray) {
-    if (depth == arraySize) {
-        listOfPaths[*currentArray] = (void *)malloc(arraySize * elementSize);
-        if (listOfPaths[*currentArray] == NULL) fprintf(stderr, "currentArray err");
-        memcpy(listOfPaths[*currentArray], path, arraySize * elementSize);
+void findPaths(void **paths, const void *elements, void *path, unsigned int elementSize, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray) {
+    // if all combinations have been gone through
+    // -2 because two elements should always stay the same
+    if (depth == arraySize - 2) {
+        // allocate memory for this specific path
+        paths[*currentArray] = (void *)malloc(arraySize * elementSize);
+        if (paths[*currentArray] == NULL) fprintf(stderr, "currentArray err");
+
+        // copy first mine into the first pos in path
+        // add the last element to the path (should always be the same element)
+        memcpy(path, elements, elementSize); 
+        memcpy((char *)path + ((arraySize - 1) * elementSize), (char *)elements + elementSize, elementSize); 
+
+        // copy this path over in paths and update how many paths have been found
+        memcpy(paths[*currentArray], path, arraySize * elementSize);
         (*currentArray)++;
     }            
     
-    for (unsigned int i = 0; i < arraySize - depth; i++) {
-        memcpy((char *)path + (depth * elementSize), (char *)elements + (i * elementSize), elementSize);
+    // loop through every element in elements but not the first (i = 1) and last element (-1) 
+    for (unsigned int i = 1; i < arraySize - depth - 1; i++) { 
+        // copy this element (elements[i]) into this path
+        memcpy((char *)path + ((depth + 1) * elementSize), (char *)elements + (i * elementSize), elementSize);
 
+        // allocate memory for elements minus 1 element because it should shrink
         void *remainingElements = (void *)malloc(elementSize * (arraySize - depth - 1));
         if (remainingElements == NULL) fprintf(stderr, "remainingElements err");
 
+        // copy the elements over into another array but not the one just added to the path
         unsigned int elementNr = 0;
         for (unsigned int j = 0; j < arraySize - depth; j++) {
             if (j == i) continue;
             memcpy((char *)remainingElements + (elementNr++ * elementSize), (char *)elements + (j * elementSize), elementSize);
         }
 
-        findPaths(listOfPaths, remainingElements, path, elementSize, depth + 1, arraySize, currentArray);
+        // call findPaths recursively with +1 to depth
+        findPaths(paths, remainingElements, path, elementSize, depth + 1, arraySize, currentArray);
         free(remainingElements);
     }
 }
