@@ -1,5 +1,6 @@
 #include "LowBoundTSP.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 //Sorts the array
 void bubbleSort(int paths, int a[paths][VALUES]){
@@ -31,14 +32,17 @@ void bubbleSort(int paths, int a[paths][VALUES]){
 }
 
 //Runs the kruskal algorithm to make a minimum spanning tree from a distance-sorted index of travelpoints
-void kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
+int **kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
     int parent[paths];
     int rank[paths];
+
+    int **MST = make2DArray(paths-1, 2);
+    int j = 0;
 
     //Function to initialize parent[] and rank[]
     makeSet(parent, rank, paths);
 
-    //To store the minimun cost
+    //To store the minimum cost
     int minCost = 0;
 
     printf("Following are the edges in the constructed MST\n");
@@ -51,12 +55,19 @@ void kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
         if (v1 != v2) {
             unionSet(v1, v2, parent, rank);
             minCost += wt;
-            printf("%d -- %d == %d\n", sortedArray[i][0],
-                   sortedArray[i][1], wt);
+            MST[j][0] = sortedArray[i][0];
+            MST[j][1] = sortedArray[i][1];
+            ++j;
+            printf("%d -- %d == %d\n", sortedArray[i][0], sortedArray[i][1], wt);
         }
     }
 
     printf("Minimum Cost Spanning Tree: %d\n", minCost);
+    if(MST == NULL) {
+        return EXIT_FAILURE;
+    } else {
+        return MST;
+    }
 }
 
 //Initialization of arrays for later use
@@ -74,8 +85,7 @@ int findParent(int parent[], int component)
     if (parent[component] == component)
         return component;
 
-    return parent[component]
-           = findParent(parent, parent[component]);
+    return parent[component] = findParent(parent, parent[component]);
 }
 
 //Function to unite two sets
@@ -99,35 +109,67 @@ void unionSet(int u, int v, int parent[], int rank[])
 }
 
 
-//Finds the minimum spanning tree to later be used in christofides to make an effecient route
-void makeMST(int paths, int travelArray[paths][VALUES]){
+//Finds the minimum spanning tree to later be used in christofides to make an efficient route
+int **makeMST(int paths, int travelArray[paths][VALUES]){
     //First we sort the array of possible travelpoints so that we can access the minimum distance-costs
     bubbleSort(paths, travelArray);
 
     //We then apply our sorted array to our kruskal algorithm to get a MST
-    kruskalAlgo(paths, travelArray);
+    int **MST = kruskalAlgo(paths, travelArray);
+
+    if (MST == NULL) {
+        return EXIT_FAILURE;
+    } else {
+        return MST;
+    }
 }
 
+int *makeSubgraph(int **MST) {
 
+
+
+
+
+
+}
+
+//Mallocs space for a 2D array to be used later
+int **make2DArray(int rows, int columns) {
+    int **result = malloc(rows * sizeof(int*));
+
+    for(int i = 0; i < rows; i++) {
+        result[i] = malloc(columns*sizeof(int));
+    }
+
+    return result;
+}
+
+void freeArray(int **array, int rows) {
+    for (int i = 0; i < rows; ++i) {
+        free(array[i]);
+    }
+    free(array);
+}
 
 
 void christofidesTSP(int paths, int travelArray[][VALUES]){
 
     //First step is creating a minimum spanning tree
-    makeMST(paths, travelArray);
+    int **MST = makeMST(paths, travelArray);
 
     //Second step is creating a subgraph of odd-degree vertices in the MST
-    makeSubgraph(travelArray);
+    //makeSubgraph(MST);
 
     //Third step is calculating 'M?' - a minimum-weight perfect matching on the subgraph
-    makeMinimumW(subgraph);
+    //makeMinimumW(subgraph);
 
     //Create new path(Graph) 'Temporary?' by combining the edges/paths in M and the MST
-    makePathTemp(subgraph, travelArray);
+    //makePathTemp(subgraph, travelArray);
 
     //Create an euler tour around the new path X -- 'E?'
-    createE(pathTemp);
+    //createE(pathTemp);
 
     //Remove twice visited paths in E and replace while still maintaining a cycle of paths
-    makeTSP(E);
+    //makeTSP(E);
+    freeArray(MST, paths-1);
 }
