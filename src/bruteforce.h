@@ -1,15 +1,13 @@
-
-typedef struct {
-    unsigned int x;
-    unsigned int y;
-} Mines;
+#ifndef BRUTEFORCE_H
+#include "scanCords.h"
+#endif
 
 /* 
  * @param mines     the list of the mines in the minefield - the first mine in the array will be the first in the path and the last in the array will be the last in the array
  * @param arraySize the number of mines in the minefield
  * @return returns  an array of the shortest path through the minefield
  */
-Mines *getShortestPath(Mines *mines, unsigned int arraySize);
+mine_s *getShortestPath(mine_s *mines, unsigned int arraySize);
 
 /*
  * @param
@@ -17,7 +15,7 @@ Mines *getShortestPath(Mines *mines, unsigned int arraySize);
  * @param
  * @return
  */
-Mines *shortestPath(Mines **minefields, unsigned int minefieldscount, unsigned int arraySize);
+mine_s *shortestPath(mine_s **minefields, unsigned int minefieldscount, unsigned int arraySize);
 
 /*
  * @param mines       the mines in a minefield 
@@ -42,13 +40,13 @@ void findPaths(void **listOfPaths, const void *elements, void *path, unsigned in
  * @param arraySize  amount of mines in path
  * @return length of path (double)
  */
-double pathLength(const Mines *path, unsigned int arraySize);
+double pathLength(const mine_s *path, unsigned int arraySize);
 
 /*
  * @param mine1 & mine2   the mines to find the distance between 
  * @return the distance between two mines
  */
-double calculateLength(Mines mine1, Mines mine2);
+double calculateLength(mine_s mine1, mine_s mine2);
 
 /*
  * @param number  the number to do the factorial calculation on

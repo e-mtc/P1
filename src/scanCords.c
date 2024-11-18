@@ -13,7 +13,7 @@ void coordinatesScanInit(mine_s* mines, char* filename)
 {
     // Adding a path specifier "../" to filename
     char filepath[20];
-    sprintf(filepath, "../%s", filename);
+    sprintf(filepath, "../../src/%s", filename);
 
     // Declaring and initialising file pointer
     FILE* file = fopen(filepath, "r");

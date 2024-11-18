@@ -1,4 +1,7 @@
+#ifndef BRUTEFORCE_H
 #include "bruteforce.h"
+#endif
+
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,9 +9,9 @@
 #include <string.h>
 
 
-Mines *getShortestPath(Mines *mines, unsigned int arraySize) {
+mine_s *getShortestPath(mine_s *mines, unsigned int arraySize) {
     // gets every combination 
-    Mines **paths = (Mines **)getPaths(mines, sizeof(Mines), arraySize);
+    mine_s **paths = (mine_s **)getPaths(mines, sizeof(mine_s), arraySize);
     if (paths == NULL) return NULL;
     for (unsigned int idx = 0; idx < arraySize; idx++) 
         if (paths[idx] == NULL) return NULL;
@@ -16,14 +19,14 @@ Mines *getShortestPath(Mines *mines, unsigned int arraySize) {
     // calculate the number of possible paths
     // calculate the shortestPath and store the result
     unsigned int numberOfPaths = factorial(arraySize - 2);
-    Mines *result = shortestPath(paths, numberOfPaths, arraySize);
+    mine_s *result = shortestPath(paths, numberOfPaths, arraySize);
     if (result == NULL) return NULL;
 
     // return the result = shortest path through the minefield
     return result;
 }
 
-Mines *shortestPath(Mines **paths, unsigned int minefieldscount, unsigned int arraySize) {
+mine_s *shortestPath(mine_s **paths, unsigned int minefieldscount, unsigned int arraySize) {
     // variables for path number, the length of the shortest path and a temporary value
     unsigned int pathNr = 0;
     double shortest = pathLength(paths[0], arraySize);
@@ -105,7 +108,7 @@ void findPaths(void **paths, const void *elements, void *path, unsigned int elem
     }
 }
 
-double pathLength(const Mines *path, unsigned int arraySize) {
+double pathLength(const mine_s *path, unsigned int arraySize) {
     // the path must include 2 mines or this function will reference a non-existing element
     if (arraySize < 2) return 0;
     // variable that stores the length of the path
@@ -116,8 +119,8 @@ double pathLength(const Mines *path, unsigned int arraySize) {
     return length;
 }
 
-double calculateLength(Mines mine1, Mines mine2) {
-    Mines temp; // temp variable for swapping mine values
+double calculateLength(mine_s mine1, mine_s mine2) {
+    mine_s temp; // temp variable for swapping mine values
     // swapvalues to avoid negative numbers 
     if (mine1.x < mine2.x) {
         temp.x = mine1.x;
