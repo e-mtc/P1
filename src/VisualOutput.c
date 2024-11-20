@@ -53,8 +53,8 @@ void showMinefield(int row, int column, const mine_s input[], int mineCount) {
         }
     }
 
-    for (i = 0; i < mineCount; ++i) { // HUSK: Generalisér antal miner ('7')
-        matrix[input[i].y][input[i].x] = i + 49; // only works with 10 number ATM
+    for (i = 0; i < mineCount; ++i) { 
+        matrix[input[i].y][input[i].x] = i + 65; // only works with 10 number ATM
     }
 
     // Print of the minefield

@@ -14,13 +14,17 @@ int main(void) {
     unsigned int minefieldSize = sizeof(minefield) / sizeof(minefield[0]);
 
     /* Including/calling VisualOutput */
-    visualOutput(10, 10, minefield, 7); // HUSK: Generalisér størrelse af row og column
+    visualOutput(10, 10, minefield, minefieldSize); // HUSK: Generalisér størrelse af row og column
 
     /* Including/calling bruteforce */
     mine_s *shortest = (mine_s*)(sizeof(mine_s)*minefieldSize);
-    if (shortest == NULL) exit(EXIT_FAILURE);
+    if (shortest == NULL) {
+        exit(EXIT_FAILURE);
+    }
     shortest = getShortestPath(minefield, minefieldSize);
-    if (shortest == NULL) exit(EXIT_FAILURE);
+    if (shortest == NULL) {
+        exit(EXIT_FAILURE);
+    }
 
     printf("\n");
 
@@ -30,7 +34,7 @@ int main(void) {
     printf("\n");
 
     /* Including/calling Anas' version of VisualOutput */
-    showMinefield(10, 10, shortest, 7); // HUSK: Generalisér størrelse af row og column + minecount (mineQuantity?)
+    showMinefield(10, 10, shortest, minefieldSize); // HUSK: Generalisér størrelse af row og column + minecount (mineQuantity?)
     printf("\n");
 
     printf("Length of the shortest path:\n");

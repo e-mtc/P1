@@ -25,7 +25,9 @@ void coordinatesScanInit(mine_s* mines, char* filename) {
     int mineQuantity = 0;
     char c = fgetc(file);
     while ((c != EOF)) {
-        if ((c == '\n') && (isdigit(fgetc(file)))) { mineQuantity++; }
+        if ((c == '\n') && (isdigit(fgetc(file)))) { 
+            mineQuantity++; 
+        }
         c = fgetc(file);
     }
 
