@@ -1,19 +1,19 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include "scanCords.h"
 
-#include <stdlib.h>
 
 // MANUAL:
 // 1. Declare and initialise array of type mine_s.
-// 2. Create string (char array) containing name of .txt file with coordinates. Eg. "cordinates.txt."
+// 2. Create string (char array) containing name of .txt file with coordinates. E.g. "coordinates.txt."
 // 3. Pass elements (from step 1 & 2) into coordinatesScanInit().
 
 void coordinatesScanInit(mine_s* mines, char* filename)
 {
     // Adding a path specifier "../" to filename
     char filepath[20];
-    sprintf(filepath, "../%s", filename);
+    sprintf(filepath, "../../src/%s", filename);
 
     // Declaring and initialising file pointer
     FILE* file = fopen(filepath, "r");
@@ -33,7 +33,7 @@ void coordinatesScanInit(mine_s* mines, char* filename)
         c = fgetc(file);
     }
 
-    // Minecount, adding 1 because not actual coordinates are counted, but number of newlines.
+    // Mine count, adding 1 because not actual coordinates are counted, but number of newlines.
     mineQuantity += 1;
     printf("Antal: %d\n", mineQuantity);
 
