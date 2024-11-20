@@ -1,7 +1,8 @@
-add_executable(test-VisMinefelt test-VisMinefelt.c)
 
-target_link_libraries(test-VisMinefelt VisualoutputAnas)
+cmake_minimum_required(VERSION 3.29)
 
-add_test(NAME test-VisMinefelt
-        COMMAND test-VisMinefelt)
+
+add_executable(TestP1
+        test-VisMinefelt.c
+)
 

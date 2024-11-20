@@ -22,8 +22,6 @@ void VisMinefelt(int minefelt[4][6]) {
 
 
 
-
-
 int main() {
 
 //I set the minefield array to 0 så that nothing is written in the spaces.
@@ -49,7 +47,7 @@ for (int i = 0; i < 5; i++) {
     minefelt[x][y] = i + 1;
 }
 
-//  text that shows the minefield:.
+//  text that shows the minefield:
     printf("Minefelt:\n");
 
 // Here we call the function Visminefelt in main and as a parameter minefelt.

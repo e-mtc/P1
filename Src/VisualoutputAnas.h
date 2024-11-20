@@ -13,7 +13,8 @@ typedef struct {
     int y;
 } punkter;
 
-// The function
+
+/// @param minefelt Som er et 2d array på 4 rækker og 6 kolonner
 void VisMinefelt(int minefelt[4][6]);
 
 
