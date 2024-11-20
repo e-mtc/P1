@@ -64,7 +64,6 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
         exit(EXIT_FAILURE);
     }
 
-    // rewind(file); // Resets the position indicator to the start of the file
     for (int i = 0; i < mineCount; ++i)
     {
         // Printing error if misinput is detected.
