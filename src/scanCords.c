@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
-#include "scanCords.h"
-
 #include <stdlib.h>
+#include "scanCords.h"
 
 // MANUAL:
 // 1. Declare and initialise array of type mine_s.

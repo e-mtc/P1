@@ -1,3 +1,4 @@
+#pragma once
 // Struct for mines
 // Add index for mines (like a number unique to each mine)
 typedef struct {

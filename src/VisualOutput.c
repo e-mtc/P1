@@ -1,9 +1,10 @@
 //
 // Created by ramoj on 05/11/2024.
 //
-
-#include  "VisualOutput.h"
 #include <stdio.h>
+#include "VisualOutput.h"
+#include "scanCords.h"
+
 
 
 /*int main (void) {
@@ -22,7 +23,7 @@
 }*/
 
 
-void VisualOutput(int row, int column, const struct input input[]) {
+void VisualOutput(int row, int column, const mine_s input[]) {
 
     // Initialize variables and matrix
     int i, j;
@@ -30,13 +31,15 @@ void VisualOutput(int row, int column, const struct input input[]) {
 
     // Make the matrix with the amount called values for row and column. If the inputed struct has
     // the x and y value of j and i, an x will be printed instead of zero to symbolise a mine
+
     for (i = 0; i < row; i++) {
         for (j = 0; j < column; j++) {
-            if ((input[j].x == j) && (input[j].y == i)) {
-                matrix[i][j] = 'x';
-            } else
             matrix[i][j] = '0';
         }
+    }
+
+    for (i = 0; i < 7; ++i) { // HUSK: Generalisér antal miner ('7')
+        matrix[input[i].y][input[i].x] = 'x';
     }
 
     // Print of the minefield
@@ -47,6 +50,4 @@ void VisualOutput(int row, int column, const struct input input[]) {
         }
         printf("\n");
     }
-
-
 }

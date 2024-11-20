@@ -8,4 +8,4 @@ target_include_directories(bruteforce PUBLIC .)
 
 add_executable(main main.c)
 
-target_link_libraries(main scanCords bruteforce)
+target_link_libraries(main scanCords VisualOutput bruteforce)
