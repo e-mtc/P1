@@ -36,7 +36,7 @@ int countMines(char *filename)
     char c = fgetc(file);
     while ((c != EOF))
     {
-        if ((c == '\n') && (isdigit(fgetc(file)))) { mineQuantity++; }
+        if ((c == '\n') && ((fgetc(file)) != 10)){ mineQuantity++;}
         c = fgetc(file);
     }
     fclose(file);
@@ -64,7 +64,6 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
         exit(EXIT_FAILURE);
     }
 
-    rewind(file); // Resets the position indicator to the start of the file
     for (int i = 0; i < mineCount; ++i)
     {
         // Printing error if misinput is detected.
@@ -74,16 +73,19 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
             fprintf(stderr, "Error: Invalid input scanned at position %d\n", ftell(file));
             exit(EXIT_FAILURE);
         }
+        // Going back only 1 because it's an AND-condition which short circuits,
+        // thus only fgetc() is used (indicator is only advanced by 1).
         fseek(file, -1, SEEK_CUR);
 
         // Scanning the coordinates
-        fscanf(file, "%d %d", &mines[i].x, &mines[i].y);
-        printf("%d and %d\n", mines[i].x, mines[i].y);
-        fseek(file, 2, SEEK_CUR);
+        fscanf(file, "%d %d %lf", &mines[i].x, &mines[i].y, &mines[i].tw);
+        printf("%d and %d tw: %0.1lf\n", mines[i].x, mines[i].y, mines[i].tw);
+        fseek(file, 2, SEEK_CUR); // Going to next line
     }
 
     // Checking if last coordinate entry is a valid digit
-    fseek(file, -3, SEEK_CUR);
+
+    fseek(file, -9, SEEK_CUR);
     if (!isdigit(fgetc(file)))
     {
         fseek(file, -1, SEEK_CUR);
@@ -94,5 +96,3 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
     // Closing file
     fclose(file);
 }
-
-
