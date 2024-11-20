@@ -6,7 +6,7 @@
 int main(void) {
 
     /* Including/calling scanCords */
-    mine_s minefield[7];  // HUSK: Skift 7 ud med givet antal miner i input
+    mine_s minefield[7];  // HUSK: Skift 7 ud med givet antal miner i input - brug mineQuantity somehow?
     char *filename = "cords.txt";
     coordinatesScanInit(minefield, filename);
 
@@ -29,7 +29,7 @@ int main(void) {
     printf("\n");
 
     /* Including/calling Anas' version of VisualOutput */
-    showMinefield(10, 10, shortest, 7); // HUSK: Generalisér størrelse af row og column
+    showMinefield(10, 10, shortest, 7); // HUSK: Generalisér størrelse af row og column + minecount (mineQuantity?)
     printf("\n");
 
     printf("Length of the shortest path:\n");
