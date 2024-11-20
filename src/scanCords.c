@@ -57,6 +57,8 @@ void coordinatesScanInit(mine_s* mines, char* filename) {
         exit(EXIT_FAILURE);
     }
 
+    printf("\n");
+
     // Closing file
     fclose(file);
 }

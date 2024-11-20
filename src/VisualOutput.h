@@ -1,7 +1,8 @@
 #include "scanCords.h"
 
-//
-// Created by ramoj on 05/11/2024.
-//
+// Rasmus' version
+void visualOutput(int row, int column, const mine_s input[], int mineCount);
 
-void VisualOutput(int row, int column, const mine_s input[]);
+// Anas' version
+void showMinefield(int row, int column, const mine_s input[], int mineCount);
+
