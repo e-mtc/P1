@@ -114,9 +114,8 @@ double pathLength(const mine_s *path, unsigned int arraySize) {
     // variable that stores the length of the path
     double length = 0;
     // calculate the length of the entire path
-    for (unsigned int idx = 1; idx < arraySize; idx++) 
-        if (path[idx - 1] == NULL && path[idx] == NULL) return -1;
-        length += calculateLength(path[idx - 1], path[idx]); 
+    for (unsigned int idx = 1; idx < arraySize; idx++)
+        length += calculateLength(path[idx - 1], path[idx]);
     return length;
 }
 
