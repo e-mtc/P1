@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "scanCords.h"
 #include "VisualOutput.h"
 #include "bruteforce.h"
 
@@ -24,7 +25,7 @@ int main(void) {
     printf("\n");
 
     for (unsigned int i = 0; i < minefieldSize; i++) {
-        printf("%ld and %ld \n", shortest[i].x, shortest[i].y);
+        printf("%u and %u \n", shortest[i].x, shortest[i].y);
     }
     printf("\n");
 

@@ -11,7 +11,7 @@
 void coordinatesScanInit(mine_s* mines, char* filename) {
     // Adding a path specifier "../" to filename
     char filepath[20];
-    sprintf(filepath, "../../src/%s", filename);
+    sprintf(filepath, "src/%s", filename);
 
     // Declaring and initialising file pointer
     FILE* file = fopen(filepath, "r");
@@ -38,7 +38,7 @@ void coordinatesScanInit(mine_s* mines, char* filename) {
         // Printing error if misinput is detected.
         if (!isdigit(fgetc(file)) && (fgetc(file) != '\n')) {
             fseek(file, -2, SEEK_CUR);
-            fprintf(stderr, "Error: Invalid input scanned at position %d\n", ftell(file));
+            fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
             exit(EXIT_FAILURE);
         }
         fseek(file, -1, SEEK_CUR);
@@ -53,7 +53,7 @@ void coordinatesScanInit(mine_s* mines, char* filename) {
     fseek(file, -3, SEEK_CUR);
     if (!isdigit(fgetc(file))) {
         fseek(file, -1, SEEK_CUR);
-        fprintf(stderr, "Error: Invalid input scanned at position %d\n", ftell(file));
+        fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
         exit(EXIT_FAILURE);
     }
 

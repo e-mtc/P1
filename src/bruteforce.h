@@ -1,6 +1,6 @@
 #ifndef BRUTEFORCE_H
+#define BRUTEFORCE_H
 #include "scanCords.h"
-#endif
 
 /* 
  * @param mines     the list of the mines in the minefield - the first mine in the array will be the first in the path and the last in the array will be the last in the array
@@ -53,3 +53,5 @@ double calculateLength(mine_s mine1, mine_s mine2);
  * @return        factorial of the input number
  */
 unsigned int factorial(unsigned int number); 
+
+#endif

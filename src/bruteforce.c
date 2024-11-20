@@ -1,6 +1,4 @@
-#ifndef BRUTEFORCE_H
 #include "bruteforce.h"
-#endif
 
 #include <math.h>
 #include <stdlib.h>
