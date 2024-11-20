@@ -1,41 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#define _POSIX_SOURCE
-#include <unistd.h>
+// #define _POSIX_SOURCE
+// #include <unistd.h>
 #include "scanCords.h"
 
+#define MAX_STR_LNGTH 256
 
 // MANUAL:
-// 1. Declare and initialise array of type mine_s.
-// 2. Create string (char array) containing name of .txt file with coordinates. E.g. "coordinates.txt."
-// 3. Pass elements (from step 1 & 2) into coordinatesScanInit().
+// 1. Get no. mines with countMines().
+// 2. Declare and initialise array of type mine_s. Set size to no. mines.
+// 3. Create string (char array) containing name of .txt file with coordinates. E.g. "coordinates.txt."
+// 4. Pass elements (from step 1 & 2) into coordinatesScanInit().
 
 
-
-
-
-void coordinatesScanInit(mine_s* mines, char* filename)
+int countMines(char *filename)
 {
     // Adding a path specifier "../" to filename
+    char filepath[MAX_STR_LNGTH];
+    sprintf(filepath, "src/%s", filename);
 
-    char filepath[256];
-    getcwd(filepath, sizeof(filepath));
-    if (getcwd(filepath, sizeof(filepath)) == NULL)
-    {
-        perror("Error: cwd");
-        exit(EXIT_FAILURE);
-    }
-    printf("Dir1: %s\n",filepath);
-
-    chdir("..");
-    printf("Dir2: %s\n",filepath);
-
-    sprintf(filepath, "%s\\src\\%s", filepath, filename);
-    printf("Dir3: %s\n",filepath);
 
     // Declaring and initialising file pointer
-    FILE* file = fopen(filepath, "r");
+    FILE* file = fopen("src/cords.txt", "r");
 
     // Prints error in case of a NULL file (empty)
     if (file == NULL)
@@ -52,13 +39,33 @@ void coordinatesScanInit(mine_s* mines, char* filename)
         if ((c == '\n') && (isdigit(fgetc(file)))) { mineQuantity++; }
         c = fgetc(file);
     }
+    fclose(file);
 
     // Mine count, adding 1 because not actual coordinates are counted, but number of newlines.
     mineQuantity += 1;
     printf("Antal: %d\n", mineQuantity);
 
+    return mineQuantity;
+}
+
+void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
+{
+    // Adding a path specifier "../" to filename
+    char filepath[MAX_STR_LNGTH];
+    sprintf(filepath, "src/%s", filename);
+
+    // Declaring and initialising file pointer
+    FILE* file = fopen(filepath, "r");
+
+    // Prints error in case of a NULL file (empty)
+    if (file == NULL)
+    {
+        perror("Error creating file");
+        exit(EXIT_FAILURE);
+    }
+
     rewind(file); // Resets the position indicator to the start of the file
-    for (int i = 0; i < mineQuantity; ++i)
+    for (int i = 0; i < mineCount; ++i)
     {
         // Printing error if misinput is detected.
         if (!isdigit(fgetc(file)) && (fgetc(file) != '\n'))
@@ -87,3 +94,5 @@ void coordinatesScanInit(mine_s* mines, char* filename)
     // Closing file
     fclose(file);
 }
+
+

@@ -6,4 +6,6 @@ typedef struct
     unsigned int y;
 } mine_s;
 
-void coordinatesScanInit(mine_s* mines, char* filnavn);
+int countMines(char*filenavn);
+
+void coordinatesScanInit(mine_s* mines, int mineCount,  char* filenavn);

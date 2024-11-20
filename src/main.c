@@ -4,10 +4,11 @@
 
 int main(void)
 {
-    mine_s mines[7];
     char *filename = "cords.txt";
+    int mineCount = countMines(filename);
 
-    coordinatesScanInit(mines, filename);
+    mine_s mines[mineCount];
+    coordinatesScanInit(mines, mineCount, filename);
 
     return EXIT_SUCCESS;
 }
