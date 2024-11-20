@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-// #define _POSIX_SOURCE
-// #include <unistd.h>
+// #define _POSIX_SOURCE // skal bruges til automatisk PATH til .txt
+// #include <unistd.h>  // skal bruges til automatisk PATH til .txt
 #include "scanCords.h"
 
 #define MAX_STR_LNGTH 256
@@ -70,7 +70,7 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
         if (!isdigit(fgetc(file)) && (fgetc(file) != '\n'))
         {
             fseek(file, -2, SEEK_CUR);
-            fprintf(stderr, "Error: Invalid input scanned at position %d\n", ftell(file));
+            fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
             exit(EXIT_FAILURE);
         }
         // Going back only 1 because it's an AND-condition which short circuits,
@@ -78,8 +78,8 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
         fseek(file, -1, SEEK_CUR);
 
         // Scanning the coordinates
-        fscanf(file, "%d %d %lf", &mines[i].x, &mines[i].y, &mines[i].tw);
-        printf("%d and %d tw: %0.1lf\n", mines[i].x, mines[i].y, mines[i].tw);
+        fscanf(file, "%u %u %lf", &mines[i].x, &mines[i].y, &mines[i].tw);
+        printf("%u and %u tw: %0.1lf\n", mines[i].x, mines[i].y, mines[i].tw);
         fseek(file, 2, SEEK_CUR); // Going to next line
     }
 
@@ -89,7 +89,7 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
     if (!isdigit(fgetc(file)))
     {
         fseek(file, -1, SEEK_CUR);
-        fprintf(stderr, "Error: Invalid input scanned at position %d\n", ftell(file));
+        fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
         exit(EXIT_FAILURE);
     }
 
