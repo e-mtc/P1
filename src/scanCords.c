@@ -37,7 +37,6 @@ int countMines(char *filename)
     while ((c != EOF))
     {
         if ((c == '\n') && ((fgetc(file)) != 10)){ mineQuantity++;}
-
         c = fgetc(file);
     }
     fclose(file);
