@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#define _POSIX_SOURCE
+#include <unistd.h>
 #include "scanCords.h"
 
 
@@ -9,11 +11,28 @@
 // 2. Create string (char array) containing name of .txt file with coordinates. E.g. "coordinates.txt."
 // 3. Pass elements (from step 1 & 2) into coordinatesScanInit().
 
+
+
+
+
 void coordinatesScanInit(mine_s* mines, char* filename)
 {
     // Adding a path specifier "../" to filename
-    char filepath[20];
-    sprintf(filepath, "../../src/%s", filename);
+
+    char filepath[256];
+    getcwd(filepath, sizeof(filepath));
+    if (getcwd(filepath, sizeof(filepath)) == NULL)
+    {
+        perror("Error: cwd");
+        exit(EXIT_FAILURE);
+    }
+    printf("Dir1: %s\n",filepath);
+
+    chdir("..");
+    printf("Dir2: %s\n",filepath);
+
+    sprintf(filepath, "%s\\src\\%s", filepath, filename);
+    printf("Dir3: %s\n",filepath);
 
     // Declaring and initialising file pointer
     FILE* file = fopen(filepath, "r");
@@ -22,6 +41,7 @@ void coordinatesScanInit(mine_s* mines, char* filename)
     if (file == NULL)
     {
         perror("Error creating file");
+        exit(EXIT_FAILURE);
     }
 
     // Calculating the number of mines (number of newlines).
