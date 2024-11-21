@@ -2,19 +2,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-
 #define MAX_STR_LNGTH 256
 #include "scanCords.h"
-
 
 // MANUAL:
 // 1. Get no. mines with countMines().
 // 2. Declare and initialise array of type mine_s. Set size to no. mines.
 // 3. Create string (char array) containing name of .txt file with coordinates. E.g. "coordinates.txt."
 // 4. Pass elements (from step 1 & 2) into coordinatesScanInit().
-
-int countMines(char *filename)
-{
+int countMines(char *filename) {
     // Adding a path specifier "../" to filename
     char filepath[MAX_STR_LNGTH];
     sprintf(filepath, "src/%s", filename);
@@ -31,23 +27,23 @@ int countMines(char *filename)
     // Calculating the number of mines (number of newlines).
     int mineQuantity = 0;
     char c = fgetc(file);
-    while ((c != EOF))
-    {
-        if ((c == '\n') && ((fgetc(file)) != 10)){ mineQuantity++;}
+    while ((c != EOF)) {
+        if ((c == '\n') && ((fgetc(file)) != 10)) { 
+            mineQuantity++;
+        }
 
         c = fgetc(file);
     }
     fclose(file);
 
     // Mine count, adding 1 because not actual coordinates are counted, but number of newlines.
-    mineQuantity += 1;
+    //mineQuantity += 1;
     printf("Antal: %d\n", mineQuantity);
 
     return mineQuantity;
 }
 
-void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
-{
+void coordinatesScanInit(mine_s* mines, int mineCount, char* filename) {
     // Adding a path specifier "../" to filename
     char filepath[MAX_STR_LNGTH];
     sprintf(filepath, "src/%s", filename);
@@ -56,14 +52,12 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
     FILE* file = fopen(filepath, "r");
 
     // Prints error in case of a NULL file (empty)
-    if (file == NULL)
-    {
+    if (file == NULL) {
         perror("Error creating file");
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < mineCount; ++i)
-    {
+    for (int i = 0; i < mineCount; ++i) {
         // Printing error if misinput is detected.
         if (!isdigit(fgetc(file)) && (fgetc(file) != '\n')) {
             fseek(file, -2, SEEK_CUR);
@@ -84,15 +78,13 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
 
 
     fseek(file, -9, SEEK_CUR);
-    if (!isdigit(fgetc(file)))
-    {
+    if (!isdigit(fgetc(file))) {
         fseek(file, -1, SEEK_CUR);
         fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
         exit(EXIT_FAILURE);
     }
 
     printf("\n");
-
     // Closing file
     fclose(file);
 }
