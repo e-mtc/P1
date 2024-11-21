@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "scanCords.h"
-
 #include "VisualOutput.h"
 #include "bruteforce.h"
 
@@ -42,4 +41,3 @@ int main(void) {
     printf("%lf\n", pathLength(shortest, minefieldSize));
     return EXIT_SUCCESS;
 }
-
