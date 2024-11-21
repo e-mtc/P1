@@ -1,5 +1,6 @@
 // Struct for mines
 // Add index for mines (like a number unique to each mine)
+
 typedef struct
 {
     unsigned int x; // x-coordinate of mine

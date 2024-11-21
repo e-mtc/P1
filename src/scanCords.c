@@ -17,8 +17,10 @@
 int countMines(char *filename)
 {
     // Adding a path specifier "../" to filename
+
     char filepath[MAX_STR_LNGTH];
     sprintf(filepath, "src/%s", filename);
+
 
 
     // Declaring and initialising file pointer
