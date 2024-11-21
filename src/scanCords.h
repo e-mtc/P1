@@ -1,3 +1,5 @@
+#ifndef SCANCORDS_H
+#define SCANCORDS_H
 // Struct for mines
 // Add index for mines (like a number unique to each mine)
 typedef struct

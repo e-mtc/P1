@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-// #define _POSIX_SOURCE
-// #include <unistd.h>
-#include "scanCords.h"
+
 
 #define MAX_STR_LNGTH 256
+#include "scanCords.h"
+
 
 // MANUAL:
 // 1. Get no. mines with countMines().
@@ -13,20 +13,17 @@
 // 3. Create string (char array) containing name of .txt file with coordinates. E.g. "coordinates.txt."
 // 4. Pass elements (from step 1 & 2) into coordinatesScanInit().
 
-
 int countMines(char *filename)
 {
     // Adding a path specifier "../" to filename
     char filepath[MAX_STR_LNGTH];
     sprintf(filepath, "src/%s", filename);
 
-
     // Declaring and initialising file pointer
     FILE* file = fopen("src/cords.txt", "r");
 
     // Prints error in case of a NULL file (empty)
-    if (file == NULL)
-    {
+    if (file == NULL) {
         perror("Error creating file");
         exit(EXIT_FAILURE);
     }
@@ -37,6 +34,7 @@ int countMines(char *filename)
     while ((c != EOF))
     {
         if ((c == '\n') && ((fgetc(file)) != 10)){ mineQuantity++;}
+
         c = fgetc(file);
     }
     fclose(file);
@@ -67,10 +65,9 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
     for (int i = 0; i < mineCount; ++i)
     {
         // Printing error if misinput is detected.
-        if (!isdigit(fgetc(file)) && (fgetc(file) != '\n'))
-        {
+        if (!isdigit(fgetc(file)) && (fgetc(file) != '\n')) {
             fseek(file, -2, SEEK_CUR);
-            fprintf(stderr, "Error: Invalid input scanned at position %d\n", ftell(file));
+            fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
             exit(EXIT_FAILURE);
         }
         // Going back only 1 because it's an AND-condition which short circuits,
@@ -85,13 +82,16 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename)
 
     // Checking if last coordinate entry is a valid digit
 
+
     fseek(file, -9, SEEK_CUR);
     if (!isdigit(fgetc(file)))
     {
         fseek(file, -1, SEEK_CUR);
-        fprintf(stderr, "Error: Invalid input scanned at position %d\n", ftell(file));
+        fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
         exit(EXIT_FAILURE);
     }
+
+    printf("\n");
 
     // Closing file
     fclose(file);
