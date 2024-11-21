@@ -14,3 +14,4 @@ int countMines(char*filenavn);
 
 // Function to read in the mines and their tw's into array of type mine_s
 void coordinatesScanInit(mine_s* mines, int mineCount,  char* filenavn);
+#endif

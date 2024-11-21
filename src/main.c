@@ -8,38 +8,38 @@
 int main(void) {
 
     /* Including/calling scanCords */
-    mine_s minefield[7];  // HUSK: Skift 7 ud med givet antal miner i input - brug mineQuantity somehow?
     char *filename = "cords.txt";
-    coordinatesScanInit(minefield, filename);
+    int mineCount = countMines(filename);
 
-    unsigned int minefieldSize = sizeof(minefield) / sizeof(minefield[0]);
-
+    mine_s minefield[mineCount];
+    coordinatesScanInit(minefield, mineCount, filename);
+    
     /* Including/calling VisualOutput */
-    visualOutput(10, 10, minefield, minefieldSize); // HUSK: Generalisér størrelse af row og column
+    visualOutput(10, 10, minefield, mineCount); // HUSK: Generalisér størrelse af row og column
 
     /* Including/calling bruteforce */
-    mine_s *shortest = (mine_s*)(sizeof(mine_s)*minefieldSize);
+    mine_s *shortest = (mine_s*)(sizeof(mine_s)*mineCount);
     if (shortest == NULL) {
         exit(EXIT_FAILURE);
     }
-    shortest = getShortestPath(minefield, minefieldSize);
+    shortest = getShortestPath(minefield, mineCount);
     if (shortest == NULL) {
         exit(EXIT_FAILURE);
     }
 
     printf("\n");
 
-    for (unsigned int i = 0; i < minefieldSize; i++) {
+    for (unsigned int i = 0; i < mineCount; i++) {
         printf("%u and %u \n", shortest[i].x, shortest[i].y);
     }
     printf("\n");
 
     /* Including/calling Anas' version of VisualOutput */
-    showMinefield(10, 10, shortest, minefieldSize); // HUSK: Generalisér størrelse af row og column + minecount (mineQuantity?)
+    showMinefield(10, 10, shortest, mineCount); // HUSK: Generalisér størrelse af row og column + minecount (mineQuantity?)
     printf("\n");
 
     printf("Length of the shortest path:\n");
-    printf("%lf\n", pathLength(shortest, minefieldSize));
+    printf("%lf\n", pathLength(shortest, mineCount));
     return EXIT_SUCCESS;
 }
 

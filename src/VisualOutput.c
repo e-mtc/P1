@@ -12,7 +12,7 @@ void visualOutput(int row, int column, const mine_s input[], int mineCount) {
 
     // Initialize variables and matrix
     int i, j;
-    char matrix [row][column];
+    char matrix[row][column];
 
     // Make the matrix with the amount called values for row and column. If the inputed struct has
     // the x and y value of j and i, an x will be printed instead of zero to symbolise a mine
@@ -42,7 +42,7 @@ void showMinefield(int row, int column, const mine_s input[], int mineCount) {
 
     // Initialize variables and matrix
     int i, j;
-    char matrix [row][column];
+    char matrix[row][column];
 
     // Make the matrix with the amount called values for row and column. If the inputed struct has
     // the x and y value of j and i, an x will be printed instead of zero to symbolise a mine
@@ -54,7 +54,7 @@ void showMinefield(int row, int column, const mine_s input[], int mineCount) {
     }
 
     for (i = 0; i < mineCount; ++i) { 
-        matrix[input[i].y][input[i].x] = i + 65; // only works with 10 number ATM
+        matrix[input[i].y][input[i].x] = i + 65; // only works with alphabet amount of numbers
     }
 
     // Print of the minefield
