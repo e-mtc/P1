@@ -4,26 +4,26 @@
 
 /*
  * @param minefield: the array of mines that are on the minefield
- * @param arraySize: amount of miens on the minefield
+ * @param mineCount: amount of mines on the minefield
  * @return the array with the shortest path through the minefield
  */
-mine_s *getShortestPath(mine_s *minefield, unsigned int arraySize);
+mine_s *getShortestPath(mine_s *minefield, unsigned int mineCount);
 
 /*
- * @param shrt: the array that holds the current shortest path
+ * @param shortestPath: the array that holds the current shortest path
  * @param minefield: the array of mines that are on the minefield
  * @param path: the current path
- * @param depth: the current amount steps (depth) that has been chosen
- * @param arraySize: the amount of mines
+ * @param depth: the current amount of steps (depth) that has been chosen
+ * @param mineCount: the amount of mines
  */
-void findShortestPath(mine_s *shrt, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int arraySize);
+void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int mineCount);
 
 /*
  * @param path       array of mines in path
- * @param arraySize  amount of mines in path
+ * @param mineCount  amount of mines in path
  * @return length of path (double)
  */
-double pathLength(const mine_s *path, unsigned int arraySize);
+double pathLength(const mine_s *path, unsigned int mineCount);
 
 /*
  * @param mine1 & mine2   the mines to find the distance between 
