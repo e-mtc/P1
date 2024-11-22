@@ -18,9 +18,9 @@ int main(void) {
 }
 
 void testGetShortestPath() {
-    Mines minefield[6] = { {3,2}, {4,3}, {8,4}, {6,2}, {1,1}, {3,2} };
+    mine_s minefield[6] = { {3,2}, {4,3}, {8,4}, {6,2}, {1,1}, {3,2} };
 
-    Mines *shrt = getShortestPath(minefield, 6);
+    mine_s *shrt = getShortestPath(minefield, 6);
     assert(shrt == NULL);
 
     double length = pathLength(shrt, 6);
@@ -29,9 +29,9 @@ void testGetShortestPath() {
 }
 
 void test5Mines() {
-    Mines mineList[5] = { {1,1}, {3,3}, {2,2}, {1,4}, {1,1} }; 
+    mine_s mineList[5] = { {1,1}, {3,3}, {2,2}, {1,4}, {1,1} };
     
-    Mines **paths = (Mines **)getPaths(mineList, sizeof(Mines), 5);
+    mine_s **paths = (mine_s **)getPaths(mineList, sizeof(mine_s), 5);
 
     assert(paths != NULL);
     for (int i = 0; i < 5; i++)
@@ -75,15 +75,15 @@ void test5Mines() {
 }
 
 void testPathLength() {
-    Mines mineList[3] = { {1,1}, {2,2}, {3,3} }; 
+    mine_s mineList[3] = { {1,1}, {2,2}, {3,3} };
     double length = pathLength(mineList, 3);
     
     assert(2.8 <= length && length <= 2.9);
 }
 
 void testCalculateLength() {
-    Mines mine1 = {1, 1};
-    Mines mine2 = {2, 2};
+    mine_s mine1 = {1, 1};
+    mine_s mine2 = {2, 2};
 
     double length = calculateLength(mine1, mine2);
 

@@ -1,8 +1,6 @@
-
-typedef struct {
-    unsigned int x;
-    unsigned int y;
-} Mines;
+#ifndef BRUTEFORCE_H
+#define BRUTEFORCE_H
+#include "scanCords.h"
 
 /*
  * @param minefield: the array of mines that are on the minefield
@@ -25,16 +23,18 @@ void findShortestPath(Mines *shrt, Mines *minefield, Mines *path, unsigned int d
  * @param arraySize  amount of mines in path
  * @return length of path (double)
  */
-double pathLength(const Mines *path, unsigned int arraySize);
+double pathLength(const mine_s *path, unsigned int arraySize);
 
 /*
  * @param mine1 & mine2   the mines to find the distance between 
  * @return the distance between two mines
  */
-double calculateLength(Mines mine1, Mines mine2);
+double calculateLength(mine_s mine1, mine_s mine2);
 
 /*
  * @param number  the number to do the factorial calculation on
  * @return        factorial of the input number
  */
 unsigned int factorial(unsigned int number); 
+
+#endif
