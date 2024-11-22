@@ -37,7 +37,7 @@ unsigned int countMines(char *filename) {
     fclose(file);
 
     // Mine count, adding 1 because not actual coordinates are counted, but number of newlines.
-    //mineQuantity += 1;
+    mineQuantity += 1;
     printf("Antal: %d\n", mineQuantity);
 
     return mineQuantity;
