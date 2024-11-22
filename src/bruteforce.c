@@ -8,45 +8,49 @@
 
 mine_s *getShortestPath(mine_s *minefield, unsigned int arraySize) {
     // allocate memory for the array that hold the shortest path
-    mine_s *shrts = (mine_s *)malloc(sizeof(mine_s) * arraySize);
-    if (shrts == NULL) {
+    mine_s *shortestPath = (mine_s *)malloc(sizeof(mine_s) * arraySize);
+    if (shortestPath == NULL) {
         return NULL;
     }
     
     // assume the first path is the shortest (shrts can't be NULL later)
-    memcpy(shrts, minefield, sizeof(mine_s) * arraySize); 
-    if (shrts == NULL) {
+    memcpy(shortestPath, minefield, sizeof(mine_s) * arraySize); 
+    if (shortestPath == NULL) {
         return NULL;
     }
     
     // allocate memory for the current path through the minefield
     mine_s *path = (mine_s *)malloc(sizeof(mine_s) * arraySize);
+    if (path == NULL) {
+        return NULL;
+    }
 
-    // try all combinations and safe the shortest in 
-    findShortestPath(shrts, minefield, path, 0, arraySize);
+    // try all combinations and save the shortest in the shortestPath pointer
+    findShortestPath(shortestPath, minefield, path, 0, arraySize);
 
-    free(path);
-    return shrts;
+    free(path); // free the path pointer as it will not be used anymore
+    return shortestPath;
 }
 
-void findShortestPath(mine_s *shrt, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int arraySize) {
-    // when the current combinations have been found
-    // check if this path is shorter than the current in shrt
+void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int arraySize) {
+    // when there are no mines left
     if (depth == arraySize - 2) {
-        // copy the first and last element into the first and last sport of path
+        // set the first and last mine to be the first and last in the current path
         memcpy(path, minefield, sizeof(mine_s)); 
         memcpy(path + arraySize - 1, minefield + 1, sizeof(mine_s)); 
         
-        // if this path is shorter than the current shortest
-        // replace shrt with the current path
-        if (pathLength(path, arraySize) < pathLength(shrt, arraySize)) {
-            memcpy(shrt, path, sizeof(mine_s) * arraySize);
+        // if the current path is shorter than the shortest path
+        // replace the shortest path with the current path
+        if (pathLength(path, arraySize) < pathLength(shortestPath, arraySize)) {
+            memcpy(shortestPath, path, sizeof(mine_s) * arraySize);
         }    
     }
     
-    // chose a mine as the next in the path
-    // call the function again but where that mine cannot be chosen
+    // loops through all possible mines
+    // set the next step to be that mine 
+    // and call function again but where that mines cannot be the next step
     for (unsigned int i = 1; i < arraySize - depth - 1; i++) {
+        // make the current mine (path[i]) the next step
         memcpy(path + depth + 1, minefield + i, sizeof(mine_s));
 
         // allocate space for the remaining mines
@@ -55,18 +59,19 @@ void findShortestPath(mine_s *shrt, mine_s *minefield, mine_s *path, unsigned in
             fprintf(stderr, "remainingMinefield err");
         }
 
-        // copy element that are not the current chosen one 
-        // into the remaining mines
+        // copy all mines that are not the current chosen mine into an array of the remaining mines
+        // mineNr -> index for filling every spot in the remainingMinefield array
+        // j -> index for every mine in the current minefield
         unsigned int mineNr = 0;
         for (unsigned int j = 0; j < arraySize - depth; j++) { 
             if (j == i) continue;
             memcpy(remainingMinefield + mineNr++, minefield + j, sizeof(mine_s));
         }
 
-        // call recursively -> find next mine in path 
+        // call recursively -> choose next mine in path 
         // stop if every mine in the field is already in the path 
-        findShortestPath(shrt, remainingMinefield, path, depth + 1, arraySize);
-        free(remainingMinefield); 
+        findShortestPath(shortestPath, remainingMinefield, path, depth + 1, arraySize);
+        free(remainingMinefield); // free remaningMinefield since it will not be used beyond this point
     }
 }   
 
