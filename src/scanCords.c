@@ -10,7 +10,7 @@
 // 2. Declare and initialise array of type mine_s. Set size to no. mines.
 // 3. Create string (char array) containing name of .txt file with coordinates. E.g. "coordinates.txt."
 // 4. Pass elements (from step 1 & 2) into coordinatesScanInit().
-int countMines(char *filename) {
+unsigned int countMines(char *filename) {
     // Adding a path specifier "../" to filename
     char filepath[MAX_STR_LNGTH];
     sprintf(filepath, "src/%s", filename);
@@ -25,7 +25,7 @@ int countMines(char *filename) {
     }
 
     // Calculating the number of mines (number of newlines).
-    int mineQuantity = 0;
+    unsigned int mineQuantity = 0;
     char c = fgetc(file);
     while ((c != EOF)) {
         if ((c == '\n') && ((fgetc(file)) != 10)) { 
@@ -43,7 +43,7 @@ int countMines(char *filename) {
     return mineQuantity;
 }
 
-void coordinatesScanInit(mine_s* mines, int mineCount, char* filename) {
+void coordinatesScanInit(mine_s* mines, unsigned int mineCount, char* filename) {
     // Adding a path specifier "../" to filename
     char filepath[MAX_STR_LNGTH];
     sprintf(filepath, "src/%s", filename);
@@ -57,7 +57,7 @@ void coordinatesScanInit(mine_s* mines, int mineCount, char* filename) {
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < mineCount; ++i) {
+    for (unsigned int i = 0; i < mineCount; ++i) {
         // Printing error if misinput is detected.
         if (!isdigit(fgetc(file)) && (fgetc(file) != '\n')) {
             fseek(file, -2, SEEK_CUR);

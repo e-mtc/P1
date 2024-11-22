@@ -10,8 +10,8 @@ typedef struct
 } mine_s;
 
 // Function to count no. mines
-int countMines(char*filenavn);
+unsigned int countMines(char*filenavn);
 
 // Function to read in the mines and their tw's into array of type mine_s
-void coordinatesScanInit(mine_s* mines, int mineCount,  char* filenavn);
+void coordinatesScanInit(mine_s* mines, unsigned int mineCount,  char* filenavn);
 #endif

@@ -135,7 +135,7 @@ double pathLength(const mine_s *path, unsigned int arraySize) {
     for (unsigned int idx = 1; idx < arraySize; idx++) {
         length += calculateLength(path[idx - 1], path[idx]);
     }
-    return length;
+    return length + path[arraySize].tw;
 }
 
 double calculateLength(mine_s mine1, mine_s mine2) {
@@ -152,7 +152,7 @@ double calculateLength(mine_s mine1, mine_s mine2) {
         mine2.y = temp.y;
     }
     // calculate distance between two mines and return
-    return sqrt(pow(mine1.x - mine2.x, 2) + pow(mine1.y - mine2.y, 2)) + mine1.tw + mine2.tw;
+    return sqrt(pow(mine1.x - mine2.x, 2) + pow(mine1.y - mine2.y, 2) * (mine1.tw + mine2.tw));
 }
 
 unsigned int factorial(unsigned int number) {

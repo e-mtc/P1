@@ -9,7 +9,7 @@ int main(void) {
 
     /* Including/calling scanCords */
     char *filename = "cords.txt";
-    int mineCount = countMines(filename);
+    unsigned int mineCount = countMines(filename);
 
     mine_s minefield[mineCount];
     coordinatesScanInit(minefield, mineCount, filename);
@@ -18,11 +18,7 @@ int main(void) {
     visualOutput(10, 10, minefield, mineCount); // HUSK: Generalisér størrelse af row og column
 
     /* Including/calling bruteforce */
-    mine_s *shortest = (mine_s*)(sizeof(mine_s)*mineCount);
-    if (shortest == NULL) {
-        exit(EXIT_FAILURE);
-    }
-    shortest = getShortestPath(minefield, mineCount);
+    mine_s *shortest = getShortestPath(minefield, mineCount);
     if (shortest == NULL) {
         exit(EXIT_FAILURE);
     }

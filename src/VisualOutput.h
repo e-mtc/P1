@@ -4,9 +4,9 @@
 #include "scanCords.h"
 
 // Rasmus' version
-void visualOutput(int row, int column, const mine_s input[], int mineCount);
+void visualOutput(int row, int column, const mine_s input[], unsigned int mineCount);
 
 // Anas' version
-void showMinefield(int row, int column, const mine_s input[], int mineCount);
+void showMinefield(int row, int column, const mine_s input[], unsigned int mineCount);
 
 #endif 
