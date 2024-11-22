@@ -7,7 +7,7 @@
  * @param arraySize: amount of miens on the minefield
  * @return the array with the shortest path through the minefield
  */
-Mines *getShortestPath(Mines *minefield, unsigned int arraySize);
+mine_s *getShortestPath(mine_s *minefield, unsigned int arraySize);
 
 /*
  * @param shrt: the array that holds the current shortest path
@@ -16,7 +16,7 @@ Mines *getShortestPath(Mines *minefield, unsigned int arraySize);
  * @param depth: the current amount steps (depth) that has been chosen
  * @param arraySize: the amount of mines
  */
-void findShortestPath(Mines *shrt, Mines *minefield, Mines *path, unsigned int depth, unsigned int arraySize);
+void findShortestPath(mine_s *shrt, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int arraySize);
 
 /*
  * @param path       array of mines in path
@@ -33,7 +33,7 @@ double calculateLength(mine_s mine1, mine_s mine2);
 
 /*
  * @param number  the number to do the factorial calculation on
- * @return        factorial of the input number
+ * @return factorial of the input number
  */
 unsigned int factorial(unsigned int number); 
 
