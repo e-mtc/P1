@@ -1,6 +1,4 @@
-#ifndef BRUTEFORCE_H
 #include "bruteforce.h"
-#endif
 
 #include <math.h>
 #include <stdlib.h>
@@ -12,15 +10,21 @@
 mine_s *getShortestPath(mine_s *mines, unsigned int arraySize) {
     // gets every combination 
     mine_s **paths = (mine_s **)getPaths(mines, sizeof(mine_s), arraySize);
-    if (paths == NULL) return NULL;
-    for (unsigned int idx = 0; idx < arraySize; idx++) 
-        if (paths[idx] == NULL) return NULL;
+    if (paths == NULL) {
+        return NULL;
+    }
+    for (unsigned int idx = 0; idx < arraySize; idx++) {
+        if (paths[idx] == NULL) {
+            return NULL;
+        }
+    }
 
-    // calculate the number of possible paths
-    // calculate the shortestPath and store the result
+    // calculate the number of possible paths and shortestPath
     unsigned int numberOfPaths = factorial(arraySize - 2);
     mine_s *result = shortestPath(paths, numberOfPaths, arraySize);
-    if (result == NULL) return NULL;
+    if (result == NULL) {
+        return NULL;
+    }
 
     // return the result = shortest path through the minefield
     return result;
@@ -29,8 +33,8 @@ mine_s *getShortestPath(mine_s *mines, unsigned int arraySize) {
 mine_s *shortestPath(mine_s **paths, unsigned int minefieldscount, unsigned int arraySize) {
     // variables for path number, the length of the shortest path and a temporary value
     unsigned int pathNr = 0;
-    double shortest = pathLength(paths[0], arraySize);
     double temp = 0;
+    double shortest = pathLength(paths[0], arraySize);
 
     // calculate the length of each path and save the shortest (or one of them)
     for (unsigned int i = 1; i < minefieldscount; i++) {
@@ -51,11 +55,17 @@ void **getPaths(void *elements, unsigned int elementSize, unsigned int arraySize
     // -2 because the first and last element should always be the same
     unsigned int combinations = factorial(arraySize - 2);  
     void **paths = (void **)malloc(sizeof(void *) * combinations);
-    if (paths == NULL) fprintf(stderr, "paths err");
+    if (paths == NULL) {
+        fprintf(stderr, "paths err");
+        return NULL;
+    }
 
     // allocate memory for keeping track of current path
     void *currentPath = (void *)malloc(elementSize * arraySize);
-    if (currentPath == NULL) fprintf(stderr, "currentPath err");
+    if (currentPath == NULL) {
+        fprintf(stderr, "currentPath err");
+        return NULL;
+    }
 
     // keep tracking of how many paths have been found (idx) 
     // and call the recursive function (findPaths)
@@ -74,7 +84,9 @@ void findPaths(void **paths, const void *elements, void *path, unsigned int elem
     if (depth == arraySize - 2) {
         // allocate memory for this specific path
         paths[*currentArray] = (void *)malloc(arraySize * elementSize);
-        if (paths[*currentArray] == NULL) fprintf(stderr, "currentArray err");
+        if (paths[*currentArray] == NULL) {
+            fprintf(stderr, "currentArray err");
+        }
 
         // copy first mine into the first pos in path
         // add the last element to the path (should always be the same element)
@@ -93,12 +105,16 @@ void findPaths(void **paths, const void *elements, void *path, unsigned int elem
 
         // allocate memory for elements minus 1 element because it should shrink
         void *remainingElements = (void *)malloc(elementSize * (arraySize - depth - 1));
-        if (remainingElements == NULL) fprintf(stderr, "remainingElements err");
+        if (remainingElements == NULL) {
+            fprintf(stderr, "remainingElements err");
+        }
 
         // copy the elements over into another array but not the one just added to the path
         unsigned int elementNr = 0;
         for (unsigned int j = 0; j < arraySize - depth; j++) {
-            if (j == i) continue;
+            if (j == i) {
+                continue;
+            }
             memcpy((char *)remainingElements + (elementNr++ * elementSize), (char *)elements + (j * elementSize), elementSize);
         }
 
@@ -110,13 +126,16 @@ void findPaths(void **paths, const void *elements, void *path, unsigned int elem
 
 double pathLength(const mine_s *path, unsigned int arraySize) {
     // the path must include 2 mines or this function will reference a non-existing element
-    if (arraySize < 2) return 0;
+    if (arraySize < 2) {
+        return 0;
+    }
     // variable that stores the length of the path
     double length = 0;
     // calculate the length of the entire path
-    for (unsigned int idx = 1; idx < arraySize; idx++) 
-        length += calculateLength(path[idx - 1], path[idx]); 
-    return length;
+    for (unsigned int idx = 1; idx < arraySize; idx++) {
+        length += calculateLength(path[idx - 1], path[idx]);
+    }
+    return length + path[arraySize].tw;
 }
 
 double calculateLength(mine_s mine1, mine_s mine2) {
@@ -133,13 +152,14 @@ double calculateLength(mine_s mine1, mine_s mine2) {
         mine2.y = temp.y;
     }
     // calculate distance between two mines and return
-    return sqrt(pow(mine1.x - mine2.x, 2) + pow(mine1.y - mine2.y, 2));
+    return sqrt(pow(mine1.x - mine2.x, 2) + pow(mine1.y - mine2.y, 2) * (mine1.tw + mine2.tw));
 }
 
 unsigned int factorial(unsigned int number) {
     // variable for keeping track of product 
     unsigned int product = 1;
-    for (unsigned int n = 1; n <= number; n++) 
+    for (unsigned int n = 1; n <= number; n++) {
         product *= n; // find the product of every number from 1 to number (input) 
+    }
     return product;
 }
