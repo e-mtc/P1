@@ -21,9 +21,16 @@ void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, uns
 /*
  * @param path       array of mines in path
  * @param mineCount  amount of mines in path
- * @return length of path (double)
+ * @return length of path (double) + terrain weights
  */
 double pathLength(const mine_s *path, unsigned int mineCount);
+
+/*
+ * @param path       array of mines in path
+ * @param mineCount  amount of mines in path
+ * @return length of path (double)
+ */
+double truePathLength(const mine_s *path, unsigned int mineCount);
 
 /*
  * @param mine1 & mine2   the mines to find the distance between 

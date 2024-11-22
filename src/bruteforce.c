@@ -84,6 +84,20 @@ double pathLength(const mine_s *path, unsigned int mineCount) {
     double length = 0;
     // calculate the length of the entire path
     for (unsigned int idx = 1; idx < mineCount; idx++) {
+        length += calculateLength(path[idx - 1], path[idx]) * (path[idx-1].tw + path[idx].tw);
+    }
+    return length;
+}
+
+double truePathLength(const mine_s *path, unsigned int mineCount) {
+    // the path must include 2 mines or this function will reference a non-existing element
+    if (mineCount < 2) {
+        return 0;
+    }
+    // variable that stores the length of the path
+    double length = 0;
+    // calculate the length of the entire path
+    for (unsigned int idx = 1; idx < mineCount; idx++) {
         length += calculateLength(path[idx - 1], path[idx]);
     }
     return length;
@@ -103,7 +117,7 @@ double calculateLength(mine_s mine1, mine_s mine2) {
         mine2.y = temp.y;
     }
     // calculate distance between two mines and return
-    return sqrt(pow(mine1.x - mine2.x, 2) + pow(mine1.y - mine2.y, 2)) * (mine1.tw + mine2.tw);
+    return sqrt(pow(mine1.x - mine2.x, 2) + pow(mine1.y - mine2.y, 2));
 }
 
 unsigned int factorial(unsigned int number) {
