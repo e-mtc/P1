@@ -84,7 +84,7 @@ double pathLength(const mine_s *path, unsigned int mineCount) {
     double length = 0;
     // calculate the length of the entire path
     for (unsigned int idx = 1; idx < mineCount; idx++) {
-        length += calculateLength(path[idx - 1], path[idx]) * (path[idx-1].tw + path[idx].tw);
+        length += calculateLength(path[idx - 1], path[idx]);
     }
     return length;
 }

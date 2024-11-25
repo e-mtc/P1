@@ -6,7 +6,6 @@ typedef struct
 {
     unsigned int x; // x-coordinate of mine
     unsigned int y; // y-coordinate of mine
-    double tw; // Terrain-weight (coefficient) at mine location
 } mine_s;
 
 // Function to count no. mines

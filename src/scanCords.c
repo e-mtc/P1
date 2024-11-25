@@ -69,15 +69,13 @@ void coordinatesScanInit(mine_s* mines, unsigned int mineCount, char* filename) 
         fseek(file, -1, SEEK_CUR);
 
         // Scanning the coordinates
-        fscanf(file, "%d %d %lf", &mines[i].x, &mines[i].y, &mines[i].tw);
-        printf("%d and %d tw: %0.1lf\n", mines[i].x, mines[i].y, mines[i].tw);
+        fscanf(file, "%d %d", &mines[i].x, &mines[i].y);
+        printf("%d and %d\n", mines[i].x, mines[i].y);
         fseek(file, 2, SEEK_CUR); // Going to next line
     }
 
     // Checking if last coordinate entry is a valid digit
-
-
-    fseek(file, -9, SEEK_CUR);
+    fseek(file, -5, SEEK_CUR);
     if (!isdigit(fgetc(file))) {
         fseek(file, -1, SEEK_CUR);
         fprintf(stderr, "Error: Invalid input scanned at position %ld\n", ftell(file));
