@@ -1,13 +1,16 @@
-#define VALUES 3
-#define WEIGHT 2
-void christofidesTSP(int paths, int travelArray[][VALUES]); //-------------------
-    int **makeMST(int paths, int travelArray[paths][VALUES]); //------------------
-        void bubbleSort(int paths, int a[paths][VALUES]);
-        int **kruskalAlgo(int paths, int sortedArray[paths][VALUES]); //-----------------
-            void makeSet(int parent[], int rank[], int n);
-            int findParent(int parent[], int component);
-            void unionSet(int u, int v, int parent[], int rank[]);
-    int *makeSubgraph(int **MST);
+#define MAX 100
 
-int **make2DArray(int rows, int columns);
-void freeArray(int** array, int rows);
+typedef struct {
+    int x;
+    int y;
+} Bombs;
+
+void christofides(Bombs cities[], int V);
+unsigned long long factorial(int n);
+void eulerianToHamiltonian(int circuit[], int circuitSize, int path[], int *pathSize, int V, int graph[MAX][MAX]);
+void eulerianCircuit(int graph[MAX][MAX], int V, int parent[], int matching[MAX][2], int matchCount, int circuit[], int *circuitSize);
+void perfectMatching(int graph[MAX][MAX], int oddVertices[], int oddCount, int matching[MAX][2]);
+void findOddVertices(int V, int parent[], int oddVertices[], int *oddCount);
+void primMST(int graph[MAX][MAX], int V, int parent[]);
+int findMinKey(int key[], int mstSet[], int V);
+int calculateDistance(Bombs bomb1, Bombs bomb2);

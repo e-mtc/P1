@@ -1,175 +1,187 @@
-#include "LowBoundTSP.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <math.h>
+#include "LowBoundTSP.h"
 
-//Sorts the array
-void bubbleSort(int paths, int a[paths][VALUES]){
-    //Temporary values are intialized
-    int tempSource, tempDestination, tempWeight;
+// Calculate distance between bombs
+int calculateDistance(Bombs bomb1, Bombs bomb2) {
+    return (int)round(sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)));
+}
 
-    //We run through the 2D arrays weight value paths-1 times since the last postition is assumed correct if the rest is
-    for (int i = 0; i < (paths - 1); ++i){
-        //This is run through paths-1-i times since the comparison function is unneeded on already assumed correct values(i)
-        for (int j = 0; j < paths - 1 - i; ++j ){
-            //A single weight value (j) in the array is compared to the one following it - If larger we swap their places
-            if (a[j][WEIGHT] > a[j+1][WEIGHT]){
-                tempSource = a[j+1][0];
-                tempDestination = a[j+1][1];
-                tempWeight = a[j+1][2];
+int findMinKey(int key[], int mstSet[], int n) {
+    int min = INT_MAX, minIndex;
 
+    for (int i = 0; i < n; i++) {
+        if (!mstSet[i] && key[i] < min) {
+            min = key[i];
+            minIndex = i;
+        }
+    }
+    return minIndex;
+}
 
-                a[j+1][0] = a[j][0];
-                a[j+1][1] = a[j][1];
-                a[j+1][2] = a[j][2];
+// Generate minimum spanning tree
+void primMST(int graph[MAX][MAX], int n, int parent[]) {
+    int key[MAX], mstSet[MAX];
 
+    for (int i = 0; i < n; i++) {
+        key[i] = INT_MAX;
+        mstSet[i] = 0;
+    }
 
-                a[j][0] = tempSource;
-                a[j][1] = tempDestination;
-                a[j][2] = tempWeight;
+    key[0] = 0;
+    parent[0] = -1;
+
+    for (int count = 0; count < n - 1; count++) {
+        int u = findMinKey(key, mstSet, n);
+        mstSet[u] = 1;
+
+        for (int i = 0; i < n; i++) {
+            if (graph[u][i] && !mstSet[i] && graph[u][i] < key[i]) {
+                parent[i] = u;
+                key[i] = graph[u][i];
             }
         }
     }
 }
 
-//Runs the kruskal algorithm to make a minimum spanning tree from a distance-sorted index of travelpoints
-int **kruskalAlgo(int paths, int sortedArray[paths][VALUES]) {
-    int parent[paths];
-    int rank[paths];
+// Find odd vertices in MST
+void findOddnertices(int n, int parent[], int oddVertices[], int *oddCount) {
+    int degree[MAX] = {0};
+    for (int i = 1; i < n; i++) {
+        degree[i]++;
+        degree[parent[i]]++;
+    }
+    for (int i = 0; i < n; i++) {
+        if (degree[i] % 2 == 1) {
+            oddVertices[(*oddCount)++] = i;
+        }
+    }
+}
 
-    int **MST = make2DArray(paths-1, 2);
-    int j = 0;
+// Function to realize minimum perfect pairing
+void perfectMatching(int graph[MAX][MAX], int oddVertices[], int oddCount, int matching[MAX][2]) {
+    int used[MAX] = {0}, matchIndex = 0;
 
-    //Function to initialize parent[] and rank[]
-    makeSet(parent, rank, paths);
+    for (int i = 0; i < oddCount; i++) {
+        if (!used[oddVertices[i]]) {
+            int minEdge = INT_MAX, minVertex = -1;
+            for (int j = i + 1; j < oddCount; j++) {
+                if (!used[oddVertices[j]] && graph[oddVertices[i]][oddVertices[j]] < minEdge) {
+                    minEdge = graph[oddVertices[i]][oddVertices[j]];
+                    minVertex = j;
+                }
+            }
+            if (minVertex != -1) {
+                used[oddVertices[i]] = used[oddVertices[minVertex]] = 1;
+                matching[matchIndex][0] = oddVertices[i];
+                matching[matchIndex][1] = oddVertices[minVertex];
+                matchIndex++;
+            }
+        }
+    }
+}
 
-    //To store the minimum cost
-    int minCost = 0;
+// Function to find the Euler circuit
+void eulerianCircuit(int graph[MAX][MAX], int n, int parent[], int matching[MAX][2], int matchCount, int circuit[], int *circuitSize) {
+    int visited[MAX] = {0};
 
-    printf("Following are the edges in the constructed MST\n");
-    for (int i = 0; i < paths; ++i) {
-        int v1 = findParent(parent, sortedArray[i][0]);
-        int v2 = findParent(parent, sortedArray[i][1]);
-        int wt = sortedArray[i][2];
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0;
+    }
 
-        //If the parents are different that means they are in different sets so we union them
-        if (v1 != v2) {
-            unionSet(v1, v2, parent, rank);
-            minCost += wt;
-            MST[j][0] = sortedArray[i][0];
-            MST[j][1] = sortedArray[i][1];
-            ++j;
-            printf("%d -- %d == %d\n", sortedArray[i][0], sortedArray[i][1], wt);
+    // Adding MST edges to the circuit
+    for (int i = 1; i < n; i++) {
+        if (!visited[parent[i]]) {
+            circuit[(*circuitSize)++] = parent[i];
+            visited[parent[i]] = 1;
         }
     }
 
-    printf("Minimum Cost Spanning Tree: %d\n", minCost);
-    if(MST == NULL) {
-        return EXIT_FAILURE;
-    } else {
-        return MST;
+    // Adding perfect pairing edges to the circuit
+    for (int i = 0; i < matchCount; i++) {
+        if (!visited[matching[i][0]] || !visited[matching[i][1]]) {
+            circuit[(*circuitSize)++] = matching[i][0];
+            circuit[(*circuitSize)++] = matching[i][1];
+            visited[matching[i][0]] = visited[matching[i][1]] = 1;
+        }
     }
 }
 
-//Initialization of arrays for later use
-void makeSet(int parent[], int rank[], int n)
-{
-    for (int i = 0; i < n; ++i) {
-        parent[i] = i;
-        rank[i] = 0;
+// Function to convert the Eulerian circuit into a Hamiltonian path
+void eulerianToHamiltonian(int circuit[], int circuitSize, int path[], int *pathSize, int n, int graph[MAX][MAX]) {
+    int visited[MAX] = {0};
+
+    for (int i = 0; i < circuitSize; i++) {
+        if (!visited[circuit[i]]) {
+            visited[circuit[i]] = 1;
+            path[(*pathSize)++] = circuit[i];
+        }
+    }
+
+    // Check if all vertices have been visited
+    for (int i = 0; i < n; i++) {
+        if (!visited[i]) {
+            // Find the position to insert the missing vertex
+            int pos = 0;
+            while (pos < *pathSize - 1 && graph[path[pos]][i] + graph[i][path[pos + 1]] <= graph[path[pos]][path[pos + 1]]) {
+                pos++;
+            }
+            // Shift vertices right to insert missing vertex
+            for (int j = *pathSize; j > pos; j--) {
+                path[j] = path[j - 1];
+            }
+            path[pos] = i;
+            (*pathSize)++;
+            visited[i] = 1;
+        }
     }
 }
 
-//Function to find the parent of a node
-int findParent(int parent[], int component)
-{
-    if (parent[component] == component)
-        return component;
-
-    return parent[component] = findParent(parent, parent[component]);
-}
-
-//Function to unite two sets
-void unionSet(int u, int v, int parent[], int rank[])
-{
-    //Finding the parents
-    u = findParent(parent, u);
-    v = findParent(parent, v);
-
-    if (rank[u] < rank[v]) {
-        parent[u] = v;
+// Function to calculate the factorial of a number
+unsigned long long factorial(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
     }
-    else if (rank[u] > rank[v]) {
-        parent[v] = u;
-    }
-    else {
-        parent[v] = u;
-        //Since the rank increases if the ranks of two sets are same
-        rank[u]++;
-    }
+    return n * factorial(n - 1);
 }
 
 
-//Finds the minimum spanning tree to later be used in christofides to make an efficient route
-int **makeMST(int paths, int travelArray[paths][VALUES]){
-    //First we sort the array of possible travelpoints so that we can access the minimum distance-costs
-    bubbleSort(paths, travelArray);
-
-    //We then apply our sorted array to our kruskal algorithm to get a MST
-    int **MST = kruskalAlgo(paths, travelArray);
-
-    if (MST == NULL) {
-        return EXIT_FAILURE;
-    } else {
-        return MST;
-    }
-}
-
-int *makeSubgraph(int **MST) {
-
-
-
-
-
-
-}
-
-//Mallocs space for a 2D array to be used later
-int **make2DArray(int rows, int columns) {
-    int **result = malloc(rows * sizeof(int*));
-
-    for(int i = 0; i < rows; i++) {
-        result[i] = malloc(columns*sizeof(int));
+// Main function to find the solution of TSP using Christofides
+void christofides(Bombs bombs[], int n) {
+    // Build the complete graph of distances between bombs
+    int graph[MAX][MAX];
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            graph[i][j] = calculateDistance(bombs[i], bombs[j]);
+        }
     }
 
-    return result;
-}
+    int parent[MAX];
+    primMST(graph, n, parent);
 
-void freeArray(int **array, int rows) {
-    for (int i = 0; i < rows; ++i) {
-        free(array[i]);
+    int oddVertices[MAX], oddCount = 0;
+    findOddnertices(n, parent, oddVertices, &oddCount);
+
+    int matching[MAX][2] = {0};
+
+    perfectMatching(graph, oddVertices, oddCount, matching);
+
+    int circuit[MAX * 2], circuitSize = 0;
+    eulerianCircuit(graph, n, parent, matching, oddCount / 2, circuit, &circuitSize);
+
+    int path[MAX], pathSize = 0;
+    eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, n, graph);
+
+    // Printing the path resulting from the Christofides algorithm
+    printf("Christofides (Christofides): ");
+    for (int i = 0; i < pathSize; i++) {
+        printf("%d ", path[i]);
     }
-    free(array);
-}
+    printf("\n");
 
-
-void christofidesTSP(int paths, int travelArray[][VALUES]){
-
-    //First step is creating a minimum spanning tree
-    int **MST = makeMST(paths, travelArray);
-
-    //Second step is creating a subgraph of odd-degree vertices in the MST
-    //makeSubgraph(MST);
-
-    //Third step is calculating 'M?' - a minimum-weight perfect matching on the subgraph
-    //makeMinimumW(subgraph);
-
-    //Create new path(Graph) 'Temporary?' by combining the edges/paths in M and the MST
-    //makePathTemp(subgraph, travelArray);
-
-    //Create an euler tour around the new path X -- 'E?'
-    //createE(pathTemp);
-
-    //Remove twice visited paths in E and replace while still maintaining a cycle of paths
-    //makeTSP(E);
-    freeArray(MST, paths-1);
+    // Calculating and printing the number of possible solutions
+    unsigned long long totalSolutions = factorial(n - 1);
+    printf("Number of possible solutions: %llu\n", totalSolutions);
 }

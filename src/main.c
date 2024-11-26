@@ -1,28 +1,19 @@
 #include "LowBoundTSP.h"
+#include <stdio.h>
 
-int main(void){
+int main() {
+    int n;
+    printf("Number of bombs: ");
+    scanf("%d", &n);
+    
+    Bombs bombs[MAX];
+    
+    printf("enter coordinates of bombs:\n");
+    for (int i = 0; i < n; i++) {
+        printf("bomb %d (x y): ", i + 1);
+        scanf("%d %d", &bombs[i].x, &bombs[i].y);
+    }
 
-    int paths = 13;
-
-
-    int test[][VALUES] = {   {1, 2, 1},
-                       {1, 6, 9},
-                       {1, 7, 7},
-                       {2, 3, 2},
-                       {2, 6, 6},
-                       {3, 4, 4},
-                       {3, 6, 5},
-                       {4, 7, 12},
-                       {5, 6, 2},
-                       {5, 7, 15},
-                       {5, 8, 6},
-                       {6, 7, 3},
-                       {6, 8, 4}};
-
-
-
-    christofidesTSP(paths, test);
-
-
+    christofides(bombs, n);
     return 0;
 }
