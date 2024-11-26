@@ -1,9 +1,8 @@
 #include "bruteforce.h"
 
-#include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <math.h>
 #include <string.h>
 
 mine_s *getShortestPath(mine_s *minefield, unsigned int mineCount) {
@@ -34,10 +33,10 @@ mine_s *getShortestPath(mine_s *minefield, unsigned int mineCount) {
 
 void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int mineCount) {
     // when there are no mines left
-    if (depth == mineCount - 2) {
+    if (depth == mineCount) { //depth == mineCount - 2
         // set the first and last mine to be the first and last in the current path
-        memcpy(path, minefield, sizeof(mine_s)); 
-        memcpy(path + mineCount - 1, minefield + 1, sizeof(mine_s)); 
+        // memcpy(path, minefield, sizeof(mine_s));
+        // memcpy(path + mineCount - 1, minefield + 1, sizeof(mine_s));
         
         // if the current path is shorter than the shortest path
         // replace the shortest path with the current path
@@ -49,12 +48,12 @@ void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, uns
     // loops through all possible mines
     // set the next step to be that mine 
     // and call function again but where that mines cannot be the next step
-    for (unsigned int i = 1; i < mineCount - depth - 1; i++) {
+    for (unsigned int i = 0; i < mineCount - depth; i++) { // unsigned int i = 0; i < mineCount - depth - 1; i++
         // make the current mine (path[i]) the next step
-        memcpy(path + depth + 1, minefield + i, sizeof(mine_s));
+        memcpy(path + depth, minefield + i, sizeof(mine_s)); // memcpy(path + depth + 1, minefield + i, sizeof(mine_s));
 
         // allocate space for the remaining mines
-        mine_s *remainingMinefield = (mine_s *)malloc(sizeof(mine_s) * (mineCount - depth - 1));
+        mine_s *remainingMinefield = (mine_s *)malloc(sizeof(mine_s) * (mineCount - depth)); // (mine_s *)malloc(sizeof(mine_s) * (mineCount - depth - 1));
         if (remainingMinefield == NULL) { 
             fprintf(stderr, "remainingMinefield err");
         }
@@ -73,7 +72,7 @@ void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, uns
         findShortestPath(shortestPath, remainingMinefield, path, depth + 1, mineCount);
         free(remainingMinefield); // free remaningMinefield since it will not be used beyond this point
     }
-}   
+}
 
 double pathLength(const mine_s *path, unsigned int mineCount) {
     // the path must include 2 mines or this function will reference a non-existing element
