@@ -47,7 +47,7 @@ void primMST(int graph[MAX][MAX], int n, int parent[]) {
 }
 
 // Find odd vertices in MST
-void findOddnertices(int n, int parent[], int oddVertices[], int *oddCount) {
+void findOddVertices(int n, int parent[], int oddVertices[], int *oddCount) {
     int degree[MAX] = {0};
     for (int i = 1; i < n; i++) {
         degree[i]++;
@@ -162,7 +162,7 @@ void christofides(Bombs bombs[], int n) {
     primMST(graph, n, parent);
 
     int oddVertices[MAX], oddCount = 0;
-    findOddnertices(n, parent, oddVertices, &oddCount);
+    findOddVertices(n, parent, oddVertices, &oddCount);
 
     int matching[MAX][2] = {0};
 
@@ -175,7 +175,7 @@ void christofides(Bombs bombs[], int n) {
     eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, n, graph);
 
     // Printing the path resulting from the Christofides algorithm
-    printf("Christofides (Christofides): ");
+    printf("Christofides: ");
     for (int i = 0; i < pathSize; i++) {
         printf("%d ", path[i]);
     }
