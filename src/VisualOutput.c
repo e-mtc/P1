@@ -51,7 +51,7 @@ void showMinefield(int row, int column, const mine_s input[], unsigned int mineC
         }
     }
 
-    for (unsigned int i = 0; i < mineCount; ++i) { 
+    for (unsigned int i = 0; i < mineCount; ++i) {
         matrix[input[i].y][input[i].x] = i + 65; // only works with alphabet amount of numbers
     }
 
@@ -62,5 +62,20 @@ void showMinefield(int row, int column, const mine_s input[], unsigned int mineC
             printf("%c", matrix[i][j]);
         }
         printf("\n");
+    }
+}
+
+void visualMinefieldSize(const mine_s input[], unsigned int *row, unsigned int *column, unsigned int mineCount) {
+    // Go through every y coordinate and assign the biggest number + 1 (+1 due to array indexing for later use) to row
+    for (int i = 0; i < mineCount; i++) {
+        if (*row < input[i].y) {
+            *row = input[i].y+1;
+        }
+    }
+    // Go through every x coordinate and assign the biggest number + 1 (+1 due to array indexing for later use) to column
+    for (int i = 0; i < mineCount; i++) {
+        if (*column < input[i].x) {
+            *column = input[i].x+1;
+        }
     }
 }
