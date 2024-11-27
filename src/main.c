@@ -45,7 +45,7 @@ int main(void) {
     showMinefield(row, column, shortest, mineCount); // HUSK: Generalisér størrelse af row og column + minecount (mineQuantity?)
     printf("\n");
 
-    printf("Length of the shortest path: %lf\n", truePathLength(shortest, mineCount));
+    printf("Length of the shortest path: %lf\n", pathLength(shortest, mineCount));
     return EXIT_SUCCESS;
 }
 
