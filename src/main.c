@@ -18,9 +18,6 @@ int main(void) {
     unsigned int row = 0, column = 0;
     visualMinefieldSize(minefield, &row, &column, mineCount);
 
-    printf("tempRow: %d\n", row);
-    printf("tempColumn: %d\n", column);
-
     /* Including/calling VisualOutput */
     visualOutput(row, column, minefield, mineCount); // HUSK: Generalisér størrelse af row og column
 
