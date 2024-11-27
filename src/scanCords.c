@@ -16,7 +16,7 @@ unsigned int countMines(char *filename) {
     sprintf(filepath, "src/%s", filename);
 
     // Declaring and initialising file pointer
-    FILE* file = fopen("src/cords.txt", "r");
+    FILE* file = fopen(filepath, "r");
 
     // Prints error in case of a NULL file (empty)
     if (file == NULL) {
