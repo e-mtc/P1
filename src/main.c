@@ -33,7 +33,7 @@ int main(void) {
     printf("\n");
 
     for (unsigned int i = 0; i < mineCount; i++) {
-        printf("%d: (%u,%u)\n", i +1, shortest[i].x, shortest[i].y);
+        printf("%c: (%u,%u)\n", i + 65, shortest[i].x, shortest[i].y);
     }
     printf("\n");
 
