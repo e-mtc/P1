@@ -70,7 +70,7 @@ void coordinatesScanInit(mine_s* mines, unsigned int mineCount, char* filename) 
 
         // Scanning the coordinates
         fscanf(file, "%d %d", &mines[i].x, &mines[i].y);
-        printf("%d and %d\n", mines[i].x, mines[i].y);
+        printf("(%u,%u)\n", mines[i].x, mines[i].y);
         fseek(file, 2, SEEK_CUR); // Going to next line
     }
 
