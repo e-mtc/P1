@@ -16,7 +16,7 @@ mine_s *getShortestPath(mine_s *minefield, unsigned int mineCount);
  * @param depth: the current amount of steps (depth) that has been chosen
  * @param mineCount: the amount of mines
  */
-void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int mineCount);
+void findShortestPath(mine_s *shortestPath, const mine_s *minefield, mine_s *path, unsigned int depth, unsigned int mineCount);
 
 /*
  * @param path       array of mines in path

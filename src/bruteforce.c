@@ -31,20 +31,13 @@ mine_s* getShortestPath(mine_s* minefield, unsigned int mineCount) {
     return shortestPath;
 }
 
-
-void findShortestPath(mine_s* shortestPath, mine_s* minefield, mine_s* path, unsigned int depth, unsigned int mineCount) {
-    // when there are no mines left
+void findShortestPath(mine_s* shortestPath, const mine_s* minefield, mine_s* path, unsigned int depth, unsigned int mineCount) {
 
     // if all combinations have been gone through
     // -2 because two elements should always stay the same
     // when there are no mines left
 
     if (depth == mineCount - 2) {
-        // allocate memory for this specific path
-        //path(shortestPath) = malloc(mineCount);
-        //if (path(shortestPath) == NULL) {
-        //    fprintf(stderr, "currentArray err");
-        //}
 
         // set the first and last mine to be the first and last in the current path
         // copy first mine into the first pos in path
@@ -86,7 +79,6 @@ void findShortestPath(mine_s* shortestPath, mine_s* minefield, mine_s* path, uns
         free(remainingMinefield); // free remaningMinefield since it will not be used beyond this point
     }
 }
-
 
 double pathLength(const mine_s* path, unsigned int mineCount) {
     // the path must include 2 mines or this function will reference a non-existing element
