@@ -1,6 +1,3 @@
-//
-// Created by ramoj on 05/11/2024.
-//
 #include <stdio.h>
 #include "stdlib.h"
 #include "string.h"
@@ -23,7 +20,7 @@ void visualOutput(int row, int column, const mine_s input[], unsigned int mineCo
     }
 
     for (unsigned int i = 0; i < mineCount; ++i) { // HUSK: Generalisér antal miner ('7')
-        matrix[input[i].y][input[i].x] = 'x';
+        matrix[(row-1)-input[i].y][input[i].x] = 'x';
     }
 
     // Print of the minefield
@@ -51,8 +48,8 @@ void showMinefield(int row, int column, const mine_s input[], unsigned int mineC
         }
     }
 
-    for (unsigned int i = 0; i < mineCount; ++i) { 
-        matrix[input[i].y][input[i].x] = i + 65; // only works with alphabet amount of numbers
+    for (unsigned int i = 0; i < mineCount; ++i) {
+        matrix[(row-1)-input[i].y][input[i].x] = i + 65; // only works with alphabet amount of numbers
     }
 
     // Print of the minefield
@@ -62,5 +59,20 @@ void showMinefield(int row, int column, const mine_s input[], unsigned int mineC
             printf("%c", matrix[i][j]);
         }
         printf("\n");
+    }
+}
+
+void visualMinefieldSize(const mine_s input[], unsigned int *row, unsigned int *column, unsigned int mineCount) {
+    // Go through every y coordinate and assign the biggest number + 2 (+2 due to array indexing for later use) to row
+    for (int i = 0; i < mineCount; i++) {
+        if (*row < input[i].y) {
+            *row = input[i].y+2;
+        }
+    }
+    // Go through every x coordinate and assign the biggest number + 1 (+1 due to array indexing for later use) to column
+    for (int i = 0; i < mineCount; i++) {
+        if (*column < input[i].x) {
+            *column = input[i].x+1;
+        }
     }
 }

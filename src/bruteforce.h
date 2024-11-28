@@ -2,56 +2,46 @@
 #define BRUTEFORCE_H
 #include "scanCords.h"
 
-/* 
- * @param mines     the list of the mines in the minefield - the first mine in the array will be the first in the path and the last in the array will be the last in the array
- * @param arraySize the number of mines in the minefield
- * @return returns  an array of the shortest path through the minefield
+/*
+ * @param minefield: the array of mines that are on the minefield
+ * @param mineCount: amount of mines on the minefield
+ * @return the array with the shortest path through the minefield
  */
-mine_s *getShortestPath(mine_s *mines, unsigned int arraySize);
+mine_s *getShortestPath(mine_s *minefield, unsigned int mineCount);
 
 /*
- * @param
- * @param
- * @param
- * @return
+ * @param shortestPath: the array that holds the current shortest path
+ * @param minefield: the array of mines that are on the minefield
+ * @param path: the current path
+ * @param depth: the current amount of steps (depth) that has been chosen
+ * @param mineCount: the amount of mines
  */
-mine_s *shortestPath(mine_s **minefields, unsigned int minefieldscount, unsigned int arraySize);
-
-/*
- * @param mines       the mines in a minefield 
- * @param arraySize   the amount of mines in a minefield
- * @return a list of every path (2D array) 
- */
-void **getPaths(void *elements, unsigned int elementSize, unsigned int arraySize);
-
-/*
- * @param listOfPaths     2D list of possible paths
- * @param mines           the mines in the minefield
- * @param path            keeps track of the mines in current path (it changes)
- * @param depth           how deep in the path the function is
- * @param arraySize       amount of mines in minefield
- * @param currentArray    keeps track of how many paths have been found
- * @return void - changes values of listOfPaths
- */
-void findPaths(void **listOfPaths, const void *elements, void *path, unsigned int elementSize, unsigned int depth, const unsigned int arraySize, unsigned int *currentArray);
+void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, unsigned int depth, unsigned int mineCount);
 
 /*
  * @param path       array of mines in path
- * @param arraySize  amount of mines in path
- * @return length of path (double)
+ * @param mineCount  amount of mines in path
+ * @return length of path (double) + terrain weights
  */
-double pathLength(const mine_s *path, unsigned int arraySize);
+double pathLength(const mine_s *path, unsigned int mineCount);
 
 /*
- * @param mine1 & mine2   the mines to find the distance between 
+ * @param path       array of mines in path
+ * @param mineCount  amount of mines in path
+ * @return length of path (double)
+ */
+double truePathLength(const mine_s *path, unsigned int mineCount);
+
+/*
+ * @param mine1 & mine2   the mines to find the distance between
  * @return the distance between two mines
  */
 double calculateLength(mine_s mine1, mine_s mine2);
 
 /*
  * @param number  the number to do the factorial calculation on
- * @return        factorial of the input number
+ * @return factorial of the input number
  */
-unsigned int factorial(unsigned int number); 
+unsigned int factorial(unsigned int number);
 
 #endif

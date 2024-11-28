@@ -2,11 +2,9 @@
 #define SCANCORDS_H
 // Struct for mines
 // Add index for mines (like a number unique to each mine)
-typedef struct
-{
+typedef struct {
     unsigned int x; // x-coordinate of mine
     unsigned int y; // y-coordinate of mine
-    double tw; // Terrain-weight (coefficient) at mine location
 } mine_s;
 
 // Function to count no. mines
