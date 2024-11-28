@@ -28,7 +28,7 @@ unsigned int countMines(char *filename) {
     unsigned int mineQuantity = 0;
     char c = fgetc(file);
     while ((c != EOF)) {
-        if ((c == '\n') && ((fgetc(file)) != 10)) { 
+        if ((c == '\n') && ((fgetc(file)) != 10)) {
             mineQuantity++;
         }
 
@@ -38,6 +38,7 @@ unsigned int countMines(char *filename) {
 
     // Mine count, adding 1 because not actual coordinates are counted, but number of newlines.
     mineQuantity += 1;
+
     printf("Mines scanned: %d\n", mineQuantity);
 
     return mineQuantity;
