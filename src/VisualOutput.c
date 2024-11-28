@@ -66,16 +66,19 @@ void showMinefield(int row, int column, const mine_s input[], unsigned int mineC
 }
 
 void visualMinefieldSize(const mine_s input[], unsigned int *row, unsigned int *column, unsigned int mineCount) {
-    // Go through every y coordinate and assign the biggest number + 2 (+2 due to array indexing for later use) to row
+    // Go through every y coordinate and assign the biggest number to row
     for (int i = 0; i < mineCount; i++) {
         if (*row < input[i].y) {
-            *row = input[i].y+2;
+            *row = input[i].y;
         }
     }
-    // Go through every x coordinate and assign the biggest number + 1 (+1 due to array indexing for later use) to column
+    // Go through every x coordinate and assign the biggest number to column
     for (int i = 0; i < mineCount; i++) {
         if (*column < input[i].x) {
-            *column = input[i].x+1;
+            *column = input[i].x;
         }
     }
+    // +1 due to array indexing for later use
+    *row += 1;
+    *column += 1;
 }
