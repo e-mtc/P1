@@ -35,7 +35,7 @@ int main(void) {
     printf("\n");
 
     printf("Length of the shortest path:\n");
-    printf("%lf\n", pathLength(shortest, mineCount));
+    printf("%lf\n", truePathLength(shortest, mineCount));
     return EXIT_SUCCESS;
 }
 
