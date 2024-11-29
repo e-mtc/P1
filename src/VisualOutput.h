@@ -9,4 +9,6 @@ void visualOutput(int row, int column, const mine_s input[], unsigned int mineCo
 // Anas' version
 void showMinefield(int row, int column, const mine_s input[], unsigned int mineCount);
 
+void visualMinefieldSize(const mine_s input[], unsigned int *row, unsigned int *column, unsigned int mineCount);
+
 #endif 
