@@ -16,7 +16,7 @@ unsigned int countMines(char *filename) {
     sprintf(filepath, "src/%s", filename);
 
     // Declaring and initialising file pointer
-    FILE* file = fopen("src/cords.txt", "r");
+    FILE* file = fopen(filepath, "r");
 
     // Prints error in case of a NULL file (empty)
     if (file == NULL) {
@@ -38,7 +38,7 @@ unsigned int countMines(char *filename) {
 
     // Mine count, adding 1 because not actual coordinates are counted, but number of newlines.
     mineQuantity += 1;
-    printf("Antal: %d\n", mineQuantity);
+    printf("Amount: %d\n", mineQuantity);
 
     return mineQuantity;
 }
@@ -70,13 +70,11 @@ void coordinatesScanInit(mine_s* mines, unsigned int mineCount, char* filename) 
 
         // Scanning the coordinates
         fscanf(file, "%d %d %lf", &mines[i].x, &mines[i].y, &mines[i].tw);
-        printf("%d and %d tw: %0.1lf\n", mines[i].x, mines[i].y, mines[i].tw);
+        printf("(%u,%u): %0.1lf\n", mines[i].x, mines[i].y, mines[i].tw);
         fseek(file, 2, SEEK_CUR); // Going to next line
     }
 
     // Checking if last coordinate entry is a valid digit
-
-
     fseek(file, -9, SEEK_CUR);
     if (!isdigit(fgetc(file))) {
         fseek(file, -1, SEEK_CUR);
