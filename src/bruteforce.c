@@ -38,9 +38,8 @@ mine_s* getShortestPath(mine_s* minefield, unsigned int mineCount)
 void findShortestPath(mine_s* shortestPath, mine_s* minefield, mine_s* path, unsigned int depth, unsigned int mineCount)
 {
     // when there are no mines left
-    if (depth == mineCount)
+    if (depth == mineCount) //depth == mineCount - 2
     {
-        //depth == mineCount - 2
         // set the first and last mine to be the first and last in the current path
         // memcpy(path, minefield, sizeof(mine_s));
         // memcpy(path + mineCount - 1, minefield + 1, sizeof(mine_s));
