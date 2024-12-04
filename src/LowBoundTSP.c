@@ -6,7 +6,7 @@
 
 // Calculate distance between two bombs
 int calculateDistance(mine_s bomb1, mine_s bomb2) {
-    return (int)round(sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)));
+    return (sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)) * (bomb1.tw + bomb2.tw));
 }
 
 int findMinKey(int key[], int mstSet[], int n) {
@@ -148,11 +148,9 @@ unsigned long long factorial(int n) {
 }
 
 //Function to take sorted array of bombs and turn into struct array for later use in printing
-mine_s *pathToStructArray(int *path, int bombAmount, mine_s *bombs, mine_s sortedArray[bombAmount]) {
-
-
-    for (int i = 0; i < bombAmount; ++i) {
-        for (int j = 0; j < bombAmount; ++j) {
+void pathToStructArray(int *path, int bombAmount, mine_s *bombs, mine_s sortedArray[bombAmount]) {
+    for (int i = 0; i < bombAmount; i++) {
+        for (int j = 0; j < bombAmount; j++) {
             if (path[i] == bombs[j].minenumber) {
                 sortedArray[i].x = bombs[j].x;
                 sortedArray[i].y = bombs[j].y;
@@ -162,13 +160,11 @@ mine_s *pathToStructArray(int *path, int bombAmount, mine_s *bombs, mine_s sorte
             }
         }
     }
-
-    return sortedArray;
 }
 
-// Main function to find the solution of TSP using Christofides
-mine_s *christofides(mine_s bombs[], int bombAmount) {
-    // Build the complete graph of distances between bombs
+//Main function to find the solution of TSP using Christofides
+void christofides(mine_s bombs[], int bombAmount, mine_s sortedArray[bombAmount]) {
+    //Build the complete graph of distances between bombs
     int graph[MAX][MAX];
     for (int i = 0; i < bombAmount; i++) {
         for (int j = 0; j < bombAmount; j++) {
@@ -197,19 +193,6 @@ mine_s *christofides(mine_s bombs[], int bombAmount) {
     eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, bombAmount, graph);
 
 
-    //Converting result to returnable array
-    mine_s sortedArray[bombAmount];
+    //Convert path[] to struct array - Make the changes in sortedArray[]
     pathToStructArray(path, bombAmount, bombs, sortedArray);
-
-
-    //test
-    printf("Christofides: ");
-    for (int i = 0; i < pathSize; i++) {
-        printf("%d ", path[i]);
-    }
-
-    printf("\n\nnewline\n\n");
-
-    //Returning sorted array
-    return sortedArray;
 }

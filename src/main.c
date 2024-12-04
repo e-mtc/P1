@@ -17,10 +17,11 @@ int main() {
     }
 
 
-    mine_s *sortedBombs = christofides(bombs, n);
+    mine_s sortedBombs[n];
+   christofides(bombs, n, sortedBombs);
 
     for (int i = 0; i < n; ++i) {
-        printf("x: %d\ny: %d\nminenumber: %d\n", sortedBombs[i].x, sortedBombs[i].y, sortedBombs[i].minenumber);
+        printf("x: %d\ny: %d\nminenumber: %d\n\n", sortedBombs[i].x, sortedBombs[i].y, sortedBombs[i].minenumber);
     }
 
     return 0;
