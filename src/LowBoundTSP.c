@@ -4,7 +4,7 @@
 #include <math.h>
 #include "LowBoundTSP.h"
 
-// Calculate distance between bombs
+// Calculate distance between two bombs
 int calculateDistance(mine_s bomb1, mine_s bomb2) {
     return (int)round(sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)));
 }
