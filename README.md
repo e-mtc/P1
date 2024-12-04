@@ -1,5 +1,5 @@
 Standarder ---------------------------------
-FUNKTIONERE GØR KUN 1 TING :)
+FUNKTIONER GØR KUN 1 TING :)
 
 Case: camelCase
 
