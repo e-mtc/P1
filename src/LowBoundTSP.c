@@ -5,7 +5,7 @@
 #include "LowBoundTSP.h"
 
 // Calculate distance between bombs
-int calculateDistance(Bombs bomb1, Bombs bomb2) {
+int calculateDistance(mine_s bomb1, mine_s bomb2) {
     return (int)round(sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)));
 }
 
@@ -147,41 +147,66 @@ unsigned long long factorial(int n) {
     return n * factorial(n - 1);
 }
 
+//Function to take sorted array of bombs and turn into struct array for later use in printing
+mine_s *pathToStructArray(int *path, int bombAmount, mine_s *bombs) {
+
+    mine_s sortedArray[bombAmount];
+
+
+    for (int i = 0; i < bombAmount; ++i) {
+        for (int j = 0; j < bombAmount; ++j) {
+            if (path[i] == bombs[j].minenumber) {
+                sortedArray[i].x = bombs[j].x;
+                sortedArray[i].y = bombs[j].y;
+                sortedArray[i].tw = bombs[j].tw;
+                sortedArray[i].minenumber = i;
+                break;
+            }
+        }
+    }
+
+    return sortedArray;
+}
 
 // Main function to find the solution of TSP using Christofides
-void christofides(Bombs bombs[], int n) {
+mine_s *christofides(mine_s bombs[], int bombAmount) {
     // Build the complete graph of distances between bombs
     int graph[MAX][MAX];
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
+    for (int i = 0; i < bombAmount; i++) {
+        for (int j = 0; j < bombAmount; j++) {
             graph[i][j] = calculateDistance(bombs[i], bombs[j]);
         }
     }
 
     int parent[MAX];
-    primMST(graph, n, parent);
+    primMST(graph, bombAmount, parent);
 
     int oddVertices[MAX], oddCount = 0;
-    findOddVertices(n, parent, oddVertices, &oddCount);
+    findOddVertices(bombAmount, parent, oddVertices, &oddCount);
 
     int matching[MAX][2] = {0};
 
     perfectMatching(graph, oddVertices, oddCount, matching);
 
     int circuit[MAX * 2], circuitSize = 0;
-    eulerianCircuit(graph, n, parent, matching, oddCount / 2, circuit, &circuitSize);
+    eulerianCircuit(graph, bombAmount, parent, matching, oddCount / 2, circuit, &circuitSize);
 
     int path[MAX], pathSize = 0;
-    eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, n, graph);
+    eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, bombAmount, graph);
 
-    // Printing the path resulting from the Christofides algorithm
+
+    //Converting result to returnable array
+    mine_s *sortedArray = pathToStructArray(path, bombAmount, bombs);
+
+
+    //test
     printf("Christofides: ");
     for (int i = 0; i < pathSize; i++) {
         printf("%d ", path[i]);
     }
-    printf("\n");
 
-    // Calculating and printing the number of possible solutions
-    unsigned long long totalSolutions = factorial(n - 1);
-    printf("Number of possible solutions: %llu\n", totalSolutions);
+    printf("\n\nnewline\n\n");
+
+    //Returning sorted array
+    return sortedArray;
 }
