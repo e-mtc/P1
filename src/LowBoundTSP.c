@@ -148,9 +148,7 @@ unsigned long long factorial(int n) {
 }
 
 //Function to take sorted array of bombs and turn into struct array for later use in printing
-mine_s *pathToStructArray(int *path, int bombAmount, mine_s *bombs) {
-
-    mine_s sortedArray[bombAmount];
+mine_s *pathToStructArray(int *path, int bombAmount, mine_s *bombs, mine_s sortedArray[bombAmount]) {
 
 
     for (int i = 0; i < bombAmount; ++i) {
@@ -200,7 +198,8 @@ mine_s *christofides(mine_s bombs[], int bombAmount) {
 
 
     //Converting result to returnable array
-    mine_s *sortedArray = pathToStructArray(path, bombAmount, bombs);
+    mine_s sortedArray[bombAmount];
+    pathToStructArray(path, bombAmount, bombs, sortedArray);
 
 
     //test
