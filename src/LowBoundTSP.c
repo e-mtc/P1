@@ -178,19 +178,23 @@ mine_s *christofides(mine_s bombs[], int bombAmount) {
         }
     }
 
+    //Step 1: Find Minimum Spanning Tree
     int parent[MAX];
     primMST(graph, bombAmount, parent);
 
+    //Step 2: Find nodes with odd degree
     int oddVertices[MAX], oddCount = 0;
     findOddVertices(bombAmount, parent, oddVertices, &oddCount);
 
+    //Step 3: Perfect Matching
     int matching[MAX][2] = {0};
-
     perfectMatching(graph, oddVertices, oddCount, matching);
 
+    //Step 4: Create Eulerian Circuit
     int circuit[MAX * 2], circuitSize = 0;
     eulerianCircuit(graph, bombAmount, parent, matching, oddCount / 2, circuit, &circuitSize);
 
+    //Step 5: Convert Eulerian to Hamiltonian (Not implemented)
     int path[MAX], pathSize = 0;
     eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, bombAmount, graph);
 

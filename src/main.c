@@ -6,7 +6,7 @@ int main() {
     printf("Number of bombs: ");
     scanf("%d", &n);
     
-    mine_s bombs[n];
+    mine_s bombs[MAX];
     
     printf("enter coordinates of bombs:\n");
     for (int i = 0; i < n; i++) {
