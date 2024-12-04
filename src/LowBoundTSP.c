@@ -194,7 +194,7 @@ mine_s *christofides(mine_s bombs[], int bombAmount) {
     int circuit[MAX * 2], circuitSize = 0;
     eulerianCircuit(graph, bombAmount, parent, matching, oddCount / 2, circuit, &circuitSize);
 
-    //Step 5: Convert Eulerian to Hamiltonian (Not implemented)
+    //Step 5: Convert Eulerian to Hamiltonian
     int path[MAX], pathSize = 0;
     eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, bombAmount, graph);
 
