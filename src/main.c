@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "scanCords.h"
 
@@ -10,6 +11,8 @@
 #define MAX_STR_LNGTH 30
 
 int main(void) {
+    clock_t start, end;
+    double cpu_time_used;
 
     /* Including/calling scanCords */
     char filename[MAX_STR_LNGTH];
@@ -18,6 +21,7 @@ int main(void) {
     scanf(" %s", filename);
     if (strlen(filename) > 30) fprintf(stderr, "Error: Filename too long\n");
 
+    start = clock();
     unsigned int mineCount = countMines(filename);
 
     mine_s minefield[mineCount];
@@ -49,6 +53,9 @@ int main(void) {
 
     printf("Length of the shortest path:\n");
     printf("%lf\n", truePathLength(shortest, mineCount));
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Execution time: %f seconds\n", cpu_time_used);
     return EXIT_SUCCESS;
 }
 
