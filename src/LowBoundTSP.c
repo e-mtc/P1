@@ -5,25 +5,28 @@
 #include "LowBoundTSP.h"
 
 // Calculate distance between two bombs
-int calculateDistance(mine_s bomb1, mine_s bomb2) {
+double calculateDistance(mine_s bomb1, mine_s bomb2) {
     return (sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)) * (bomb1.tw + bomb2.tw));
 }
 
-int findMinKey(int key[], int mstSet[], int n) {
-    int min = INT_MAX, minIndex;
+int findMinKey(double key[], double mstSet[], int n) {
+    int minIndex = 0;
+    double min = INT_MAX;
 
     for (int i = 0; i < n; i++) {
         if (!mstSet[i] && key[i] < min) {
             min = key[i];
+            printf("min = key[%d]: %lf\n", i, min);
             minIndex = i;
+            printf("minIndex = i: %d\n", minIndex);
         }
     }
     return minIndex;
 }
 
 // Generate minimum spanning tree
-void primMST(int graph[MAX][MAX], int n, int parent[]) {
-    int key[MAX], mstSet[MAX];
+void primMST(double graph[MAX][MAX], int n, int parent[]) {
+    double key[MAX], mstSet[MAX];
 
     for (int i = 0; i < n; i++) {
         key[i] = INT_MAX;
@@ -40,7 +43,9 @@ void primMST(int graph[MAX][MAX], int n, int parent[]) {
         for (int i = 0; i < n; i++) {
             if (graph[u][i] && !mstSet[i] && graph[u][i] < key[i]) {
                 parent[i] = u;
+                printf("parent[%d] = %d: %d\n", i, u, parent[i]);
                 key[i] = graph[u][i];
+                printf("key[%d] = graph[%d][%d]: %lf\n", i, u, i, key[i]);
             }
         }
     }
@@ -51,17 +56,22 @@ void findOddVertices(int n, int parent[], int oddVertices[], int *oddCount) {
     int degree[MAX] = {0};
     for (int i = 1; i < n; i++) {
         degree[i]++;
+        printf("degree[%d]++: %d\n", i, degree[i]);
         degree[parent[i]]++;
+        printf("degree[parent[%d]]++: %d\n", i, degree[parent[i]]);
     }
     for (int i = 0; i < n; i++) {
         if (degree[i] % 2 == 1) {
             oddVertices[(*oddCount)++] = i;
+            printf("*oddCount: %d\n", *oddCount);
+            printf("degree[%d]: %d\n", i, degree[i]);
+            printf("oddVertices[(*oddCount)++]: %d\n", oddVertices[(*oddCount)]);
         }
     }
 }
 
 // Function to realize minimum perfect pairing
-void perfectMatching(int graph[MAX][MAX], int oddVertices[], int oddCount, int matching[MAX][2]) {
+void perfectMatching(double graph[MAX][MAX], int oddVertices[], int oddCount, int matching[MAX][2]) {
     int used[MAX] = {0}, matchIndex = 0;
 
     for (int i = 0; i < oddCount; i++) {
@@ -84,7 +94,7 @@ void perfectMatching(int graph[MAX][MAX], int oddVertices[], int oddCount, int m
 }
 
 // Function to find the Euler circuit
-void eulerianCircuit(int graph[MAX][MAX], int n, int parent[], int matching[MAX][2], int matchCount, int circuit[], int *circuitSize) {
+void eulerianCircuit(double graph[MAX][MAX], int n, int parent[], int matching[MAX][2], int matchCount, int circuit[], int *circuitSize) {
     int visited[MAX] = {0};
 
     for (int i = 0; i < n; i++) {
@@ -110,7 +120,7 @@ void eulerianCircuit(int graph[MAX][MAX], int n, int parent[], int matching[MAX]
 }
 
 // Function to convert the Eulerian circuit into a Hamiltonian path
-void eulerianToHamiltonian(int circuit[], int circuitSize, int path[], int *pathSize, int n, int graph[MAX][MAX]) {
+void eulerianToHamiltonian(int circuit[], int circuitSize, int path[], int *pathSize, int n, double graph[MAX][MAX]) {
     int visited[MAX] = {0};
 
     for (int i = 0; i < circuitSize; i++) {
@@ -165,10 +175,11 @@ void pathToStructArray(int *path, int bombAmount, mine_s *bombs, mine_s sortedAr
 //Main function to find the solution of TSP using Christofides
 void christofides(mine_s bombs[], int bombAmount, mine_s sortedArray[bombAmount]) {
     //Build the complete graph of distances between bombs
-    int graph[MAX][MAX];
+    double graph[MAX][MAX];
     for (int i = 0; i < bombAmount; i++) {
         for (int j = 0; j < bombAmount; j++) {
             graph[i][j] = calculateDistance(bombs[i], bombs[j]);
+            printf("graph[%d][%d]: %lf\n", i, j, graph[i][j]);
         }
     }
 
