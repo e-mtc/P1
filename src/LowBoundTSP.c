@@ -14,7 +14,7 @@ int findEdgeAmount(int bombAmount) {
     for (int i = bombAmount-1; 0 < i; i--) {
         edgeAmount += i;
     }
-    return bombAmount;
+    return edgeAmount;
 }
 
 //Makes the struct array to a travel
@@ -62,7 +62,7 @@ void bubbleSort(int edgeAmount, edge_s edgeArray[edgeAmount]){
 }
 
 //Runs the kruskal algorithm to make a minimum spanning tree from a distance-sorted index of travelpoints
-void kruskalAlgo(int edgeAmount, int bombAmount, double minCost, edge_s sortedArray[edgeAmount], edge_s MST[bombAmount-1]) {
+void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s sortedArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]) {
     int parent[edgeAmount];
     int rank[edgeAmount];
     int j = 0;
@@ -78,16 +78,22 @@ void kruskalAlgo(int edgeAmount, int bombAmount, double minCost, edge_s sortedAr
         //If the parents are different that means they are in different sets so we union them
         if (v1 != v2) {
             unionSet(v1, v2, parent, rank);
-            minCost += sortedArray[i].distanceBetween;
+            *minCost += sortedArray[i].distanceBetween;
+
+            //We note that these vertexes now have an edge in the MST for later use
+            bombs[sortedArray[i].sourceBomb.mineNumber].edgeAmount++;
+            bombs[sortedArray[i].destinationBomb.mineNumber].edgeAmount++;
+
+            //Then save the destination in our MST
             MST[j].sourceBomb = sortedArray[i].sourceBomb;
             MST[j].destinationBomb = sortedArray[i].destinationBomb;
             MST[j].distanceBetween = sortedArray[i].distanceBetween;
-            ++j;
             printf("%d -- %d == %lf\n", MST[j].sourceBomb.mineNumber, MST[j].destinationBomb.mineNumber, MST[j].distanceBetween);
+            ++j;
         }
     }
 
-    printf("Minimum Cost Spanning Tree: %lf\n", minCost);
+    printf("Minimum Cost Spanning Tree: %lf\n", *minCost);
 }
 
 //Initialization of arrays for later use
@@ -127,23 +133,40 @@ void unionSet(int u, int v, int parent[], int rank[]) {
 
 
 //Finds the minimum spanning tree to later be used in christofides to make an efficient route
-void makeMST(int edgeAmount, int bombAmount, double minCost, edge_s edgeArray[edgeAmount], edge_s MST[bombAmount-1]) {
+void makeMST(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]) {
     //First we sort the array of possible travelpoints so that we can access the minimum distance-costs
     bubbleSort(edgeAmount, edgeArray);
 
     //We then apply our sorted array to our kruskal algorithm to get a MST
-    kruskalAlgo(edgeAmount, bombAmount, minCost, edgeArray, MST);
+    kruskalAlgo(edgeAmount, bombAmount, minCost, edgeArray, MST, bombs);
 }
 
-int *makeSubgraph(int **MST) {
+void findOddVertices(int bombAmount, int oddCount, mine_s bombs[bombAmount], mine_s oddVertices[oddCount]) {
+    int oddsAdded = 0;
 
-
-
-
-
-
+    for(int i = 0; i < bombAmount; i++) {
+            if (bombs[i].edgeAmount % 2 == 1){
+                oddVertices[oddsAdded].x = bombs[i].x;
+                oddVertices[oddsAdded].y = bombs[i].y;
+                oddVertices[oddsAdded].tw = bombs[i].tw;
+                oddVertices[oddsAdded].mineNumber = bombs[i].mineNumber;
+                oddVertices[oddsAdded].edgeAmount = bombs[i].edgeAmount;
+                oddsAdded++;
+        }
+    }
 }
 
+int findOddAmount(int bombAmount, mine_s bombs[bombAmount]) {
+    int oddCount = 0;
+
+    for(int i = 0; i < bombAmount; i++) {
+        if (bombs[i].edgeAmount % 2 == 1) {
+            oddCount++;
+        }
+    }
+
+    return oddCount;
+}
 
 
 
@@ -155,35 +178,37 @@ int *makeSubgraph(int **MST) {
 
 
 //Main function to find the solution of TSP using Christofides
-void christofides(mine_s bombs[], int bombAmount) {
+void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]) {
     //Finds the amount of edges in edgeArray
     int edgeAmount = findEdgeAmount(bombAmount);
 
     //Build the complete graph of distances between bombs
-    edge_s edgeArray[bombAmount];
+    edge_s edgeArray[edgeAmount];
     structToStruct(bombs, bombAmount, edgeAmount, edgeArray);
 
     //Step 1: Find Minimum Spanning Tree
     edge_s MST[bombAmount-1];
     double minCost = 0;
-    makeMST(edgeAmount, bombAmount, minCost, edgeArray, MST);
+    makeMST(edgeAmount, bombAmount, &minCost, edgeArray, MST, bombs);
+    printf("%lf", minCost);
 
 
+    //Step 2: Find nodes with odd degree (Amount of edges)
+    int oddCount = findOddAmount(bombAmount, bombs);
+    mine_s oddVertices[oddCount];
+    findOddVertices(bombAmount, oddCount, bombs, oddVertices);
 
-    //Step 2: Find nodes with odd degree
-    int oddVertices[MAX], oddCount = 0;
-    //findOddVertices(bombAmount, parent, oddVertices, &oddCount);
 
     //Step 3: Perfect Matching
-    int matching[MAX][2] = {0};
+    //int matching[MAX][2] = {0};
     //perfectMatching(graph, oddVertices, oddCount, matching);
 
     //Step 4: Create Eulerian Circuit
-    int circuit[MAX * 2], circuitSize = 0;
+    //int circuit[MAX * 2], circuitSize = 0;
     //eulerianCircuit(graph, bombAmount, parent, matching, oddCount / 2, circuit, &circuitSize);
 
     //Step 5: Convert Eulerian to Hamiltonian
-    int path[MAX], pathSize = 0;
+    //int path[MAX], pathSize = 0;
     //eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, bombAmount, graph);
 
 
@@ -191,5 +216,6 @@ void christofides(mine_s bombs[], int bombAmount) {
     //pathToStructArray(path, bombAmount, bombs, sortedArray);
 
 
-    freeArray(edgeArray, edgeAmount);
+    //Free allocated memory
+    free(oddVertices);
 }
