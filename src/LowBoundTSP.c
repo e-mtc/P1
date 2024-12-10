@@ -240,7 +240,7 @@ int nextIsPerfMatch(int perfectSize, edge_s prevEdge, edge_s perfectMatching[per
     return false;
 }
 
-//Adds an edge to Eurelian Circuit if the next is one located in perfectMatchin[] and also is not already in the circuit
+//Adds an edge to Eurelian Circuit if the next is one located in perfectMatching[] and also is not already in the circuit
 void addPerfectMatchEdge(int edgesAdded, int perfectSize, int eurelianSize, int *wasAdded, edge_s perfectMatching[perfectSize], edge_s previousEdge, edge_s eurelianCircuit[eurelianSize]) {
     mine_s tempMine;
 
@@ -264,9 +264,7 @@ void addPerfectMatchEdge(int edgesAdded, int perfectSize, int eurelianSize, int 
 }
 
 
-
-
-
+//Adds an edge to Eurelian Circuit if the next is one located in MST[] and also is not already in the circuit
 void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s previousEdge, edge_s eurelianCircuit[eurelianSize]) {
     mine_s tempMine;
 
@@ -287,7 +285,12 @@ void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSiz
     }
 }
 
+void eulerianShortcut(int shortcutSize, int eurelianSize, edge_s eurelianCircuit[eurelianSize], edge_s eurelianShortcut[shortcutSize]) {
 
+
+
+
+}
 
 
 
@@ -334,9 +337,8 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     }
 
     //Step 5: Shortcut edges that repeat to already visited vertices
-
     edge_s eurelianShortcut[bombAmount];
-    eulerianShortcut(circuit, circuitSize, path, &pathSize, bombAmount, graph);
+    eulerianShortcut(bombAmount, eurelianSize, eurelianC, eurelianShortcut);
 
 
     //Convert path[] to struct array - Make the changes in sortedArray[]
