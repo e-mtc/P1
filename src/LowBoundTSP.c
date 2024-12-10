@@ -223,7 +223,7 @@ void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianS
         int perfMatch = nextIsPerfMatch(perfectSize, eurelianCircuit[eAdded-1], perfectMatching);
 
         if (perfMatch && perfMAdded < perfectSize) {
-            addPerfectMatchEdge(eAdded, perfectSize, perfectMatching, eurelianCircuit);
+            addPerfectMatchEdge(eAdded, perfectSize, perfectMatching, eurelianCircuit[eAdded-1]);
             perfMAdded++;
         } else {
             addMSTEdge();
@@ -265,9 +265,23 @@ int nextIsPerfMatch(int perfectSize, edge_s prevEdge, edge_s perfectMatching[per
 }
 
 
-void addPerfectMatchEdge(int edgesAdded, int perfectSize, edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[]) {
-    for (int i = 0; i < perfectSize; i++) {
+void addPerfectMatchEdge(int edgesAdded, int perfectSize, edge_s perfectMatching[perfectSize], edge_s previousEdge) {
+    mine_s tempMine;
 
+    for (int i = 0; i < perfectSize; i++) {
+        //Checks if connected
+        if ((perfectMatching[i].sourceBomb.mineNumber == previousEdge.destinationBomb.mineNumber && perfectMatching[i].included == 0) ||
+            (perfectMatching[i].destinationBomb.mineNumber == previousEdge.destinationBomb.mineNumber && perfectMatching[i].included == 0)) {
+
+            //Swamps minenumber so source
+            if (perfectMatching[i].destinationBomb.mineNumber == previousEdge.destinationBomb.mineNumber) {
+                tempMine = perfectMatching[i].destinationBomb;
+                perfectMatching[i].destinationBomb = perfectMatching[i].sourceBomb;
+                perfectMatching[i].sourceBomb = tempMine;
+            }
+
+
+        }
     }
 }
 
