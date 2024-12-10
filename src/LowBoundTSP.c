@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 #include "LowBoundTSP.h"
 
@@ -28,7 +27,7 @@ void structToStruct(mine_s bombs[], int bombAmount, int edgeAmount, edge_s edgeA
             edgeArray[pathsMade].sourceBomb = bombs[i];
             edgeArray[pathsMade].destinationBomb = bombs[j];
             edgeArray[pathsMade].distanceBetween = calculateDistance(bombs[i], bombs[j]);
-            edgeArray[pathsMade].included = 0;
+            edgeArray[pathsMade].included = false;
             pathsMade++;
         }
     }
@@ -91,6 +90,7 @@ void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s sortedA
             MST[j].sourceBomb = sortedArray[i].sourceBomb;
             MST[j].destinationBomb = sortedArray[i].destinationBomb;
             MST[j].distanceBetween = sortedArray[i].distanceBetween;
+            MST[j].included = false;
             printf("%d -- %d == %lf\n", MST[j].sourceBomb.mineNumber, MST[j].destinationBomb.mineNumber, MST[j].distanceBetween);
             ++j;
         }
@@ -185,7 +185,7 @@ void perfectMatching(int oddCount, int perfectSize, mine_s oddVertices[oddCount]
 
     for (int i = 0; i < oddCount/2; i++) {
         for (int j = 0+i; j < edgeAmount; j++) {
-            if (!alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, perfectSize, perfectMatch) && !alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, perfectSize, perfectMatch)) {
+            if (!alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, perfectSize, perfectMatch) && !alreadyIncludedInPM(oddEdgeArray[j].destinationBomb, perfectSize, perfectMatch)) {
                 perfectMatch[addedCount] = oddEdgeArray[j];
                 addedCount++;
                 break;
@@ -208,52 +208,28 @@ int alreadyIncludedInPM(mine_s bomb, int perfectSize, edge_s perfectMatchArray[p
 
 void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[eurelianSize]) {
     int eAdded = 0;
-    int mstAdded = 0;
-    int perfMAdded = 0;
+    int wasUsed;
 
     eurelianCircuit[eAdded] = MST[0];
+    MST[0].included = true;
     eAdded++;
 
-    int tempLength;
 
-    edge_s tempEdges[eurelianSize];
-    mergePerfMatchMST(MSTSize, perfectSize, eurelianSize, MST, perfectMatching, tempEdges);
+    for (int i = 1; i < eurelianSize; i++) {
+        wasUsed = false;
+        if (nextIsPerfMatch(perfectSize, eurelianCircuit[eAdded-1], perfectMatching)) {
+            addPerfectMatchEdge(eAdded, perfectSize, eurelianSize, &wasUsed, perfectMatching, eurelianCircuit[eAdded-1], eurelianCircuit);
+        }
 
-    for (int i = 0+eAdded; i < eurelianSize; i++) {
-        int perfMatch = nextIsPerfMatch(perfectSize, eurelianCircuit[eAdded-1], perfectMatching);
-
-        if (perfMatch && perfMAdded < perfectSize) {
-            addPerfectMatchEdge(eAdded, perfectSize, perfectMatching, eurelianCircuit[eAdded-1]);
-            perfMAdded++;
-        } else {
-            addMSTEdge();
-            mstAdded++;
+        if (!wasUsed) {
+            addMSTEdge(eAdded, MSTSize, eurelianSize, MST, eurelianCircuit[eAdded-1], eurelianCircuit);
         }
         eAdded++;
     }
-    //checkForNextEntry(eurelianCircuit[eAdded-1]);
 }
 
-int checkIfPreviouslyIncluded(int eurelianSize, int edgesAdded, edge_s eurelianCircuit[eurelianSize], edge_s testCase) {
 
-
-
-}
-
-void mergePerfMatchMST(int MSTSize, int perfectSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s tempEdges[eurelianSize]) {
-    int edgesAdded = 0;
-
-    for (int i = 0; i < MSTSize; i++) {
-        tempEdges[edgesAdded] = MST[i];
-        edgesAdded++;
-    }
-
-    for (int j = 0; j < perfectSize; j++) {
-        tempEdges[edgesAdded] = perfectMatching[j];
-        edgesAdded++;
-    }
-}
-
+//Figures out if the current destination point is included in the perfect match subgraph
 int nextIsPerfMatch(int perfectSize, edge_s prevEdge, edge_s perfectMatching[perfectSize]) {
     for (int i = 0; i < perfectSize; i++) {
         if (prevEdge.destinationBomb.mineNumber == perfectMatching[i].sourceBomb.mineNumber ||
@@ -264,23 +240,25 @@ int nextIsPerfMatch(int perfectSize, edge_s prevEdge, edge_s perfectMatching[per
     return false;
 }
 
-
-void addPerfectMatchEdge(int edgesAdded, int perfectSize, edge_s perfectMatching[perfectSize], edge_s previousEdge) {
+//Adds an edge to Eurelian Circuit if the next is one located in perfectMatchin[] and also is not already in the circuit
+void addPerfectMatchEdge(int edgesAdded, int perfectSize, int eurelianSize, int *wasAdded, edge_s perfectMatching[perfectSize], edge_s previousEdge, edge_s eurelianCircuit[eurelianSize]) {
     mine_s tempMine;
 
     for (int i = 0; i < perfectSize; i++) {
-        //Checks if connected
-        if ((perfectMatching[i].sourceBomb.mineNumber == previousEdge.destinationBomb.mineNumber && perfectMatching[i].included == 0) ||
-            (perfectMatching[i].destinationBomb.mineNumber == previousEdge.destinationBomb.mineNumber && perfectMatching[i].included == 0)) {
+        //Checks if an individual edge is connected and also not already included
+        if ((perfectMatching[i].sourceBomb.mineNumber == previousEdge.destinationBomb.mineNumber && perfectMatching[i].included == false) ||
+            (perfectMatching[i].destinationBomb.mineNumber == previousEdge.destinationBomb.mineNumber && perfectMatching[i].included == false)) {
 
-            //Swamps minenumber so source
+            //Swamps mine location so source matches previous destination
             if (perfectMatching[i].destinationBomb.mineNumber == previousEdge.destinationBomb.mineNumber) {
                 tempMine = perfectMatching[i].destinationBomb;
                 perfectMatching[i].destinationBomb = perfectMatching[i].sourceBomb;
                 perfectMatching[i].sourceBomb = tempMine;
             }
-
-
+            perfectMatching[i].included = true;
+            eurelianCircuit[edgesAdded] = perfectMatching[i];
+            *wasAdded = true;
+            break;
         }
     }
 }
@@ -289,7 +267,25 @@ void addPerfectMatchEdge(int edgesAdded, int perfectSize, edge_s perfectMatching
 
 
 
+void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s previousEdge, edge_s eurelianCircuit[eurelianSize]) {
+    mine_s tempMine;
 
+    for (int i = 0; i < MSTSize; i++) {
+        //Checks if an individual edge is connected and also not already included
+        if ((MST[i].sourceBomb.mineNumber == previousEdge.destinationBomb.mineNumber && MST[i].included == false) ||
+            (MST[i].destinationBomb.mineNumber == previousEdge.destinationBomb.mineNumber && MST[i].included == false)) {
+
+            //Swamps mine location so source matches previous destination
+            if (MST[i].destinationBomb.mineNumber == previousEdge.destinationBomb.mineNumber) {
+                tempMine = MST[i].destinationBomb;
+                MST[i].destinationBomb = MST[i].sourceBomb;
+                MST[i].sourceBomb = tempMine;
+            }
+            MST[i].included = true;
+            eurelianCircuit[edgesAdded] = MST[i];
+        }
+    }
+}
 
 
 
@@ -330,9 +326,17 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     edge_s eurelianC[eurelianSize];
     eulerianCircuit(bombAmount, perfectSize, bombAmount-1, eurelianSize, MST, perfectMatch, eurelianC);
 
-    //Step 5: Convert Eulerian to Hamiltonian
-    //int path[MAX], pathSize = 0;
-    //eulerianToHamiltonian(circuit, circuitSize, path, &pathSize, bombAmount, graph);
+
+    //test
+    printf("\nEurelian cycle:\n");
+    for (int i = 0; i < eurelianSize; i++) {
+        printf("%d -- %d\n", eurelianC[i].sourceBomb.mineNumber, eurelianC[i].destinationBomb.mineNumber);
+    }
+
+    //Step 5: Shortcut edges that repeat to already visited vertices
+
+    edge_s eurelianShortcut[bombAmount];
+    eulerianShortcut(circuit, circuitSize, path, &pathSize, bombAmount, graph);
 
 
     //Convert path[] to struct array - Make the changes in sortedArray[]
@@ -340,5 +344,4 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
 
 
     //Free allocated memory
-    free(oddVertices);
 }
