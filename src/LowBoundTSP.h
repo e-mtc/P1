@@ -28,8 +28,12 @@ void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArr
 void findOddVertices(int bombAmount, int oddCount, mine_s bombs[bombAmount], mine_s oddVertices[oddCount]);
 int findOddAmount(int bombAmount, mine_s bombs[bombAmount]);
 
-void perfectMatching(int oddCount, mine_s oddVertices[oddCount], edge_s perfectMatch[oddCount/2]);
+void perfectMatching(int oddCount, int perfectSize, mine_s oddVertices[oddCount], edge_s perfectMatch[perfectSize]);
 int alreadyIncludedInPM(mine_s bomb, int perfectSize, edge_s perfectMatchArray[perfectSize]);
+
+void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[eurelianSize]);
+int checkIfPreviouslyIncluded(int eurelianSize, int edgesAdded, edge_s eurelianCircuit[eurelianSize], edge_s testCase);
+
 
 
 void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]);

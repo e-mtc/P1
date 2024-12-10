@@ -173,7 +173,7 @@ int findOddAmount(int bombAmount, mine_s bombs[bombAmount]) {
 }
 
 //Finds perfect matching using greedy algorithm
-void perfectMatching(int oddCount, mine_s oddVertices[oddCount], edge_s perfectMatch[oddCount/2]) {
+void perfectMatching(int oddCount, int perfectSize, mine_s oddVertices[oddCount], edge_s perfectMatch[perfectSize]) {
     int addedCount = 0;
     int edgeAmount = findEdgeAmount(oddCount);
 
@@ -184,7 +184,7 @@ void perfectMatching(int oddCount, mine_s oddVertices[oddCount], edge_s perfectM
 
     for (int i = 0; i < oddCount/2; i++) {
         for (int j = 0+i; j < edgeAmount; j++) {
-            if (!alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, oddCount/2, perfectMatch) && !alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, oddCount/2, perfectMatch)) {
+            if (!alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, perfectSize, perfectMatch) && !alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, perfectSize, perfectMatch)) {
                 perfectMatch[addedCount] = oddEdgeArray[j];
                 addedCount++;
             }
@@ -204,6 +204,34 @@ int alreadyIncludedInPM(mine_s bomb, int perfectSize, edge_s perfectMatchArray[p
 }
 
 
+void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[eurelianSize]) {
+    int eAdded = 0;
+
+    eurelianCircuit[eAdded] = MST[0];
+    eAdded++;
+
+    for (int i = 0; i < eurelianSize; i++) {
+        if (!checkIfPreviouslyIncluded(eurelianSize, eAdded, eurelianCircuit, ??)) {//Find ud af hvilken vi kigger på først
+            if (!checkIfHasPerfectmatching) {
+                addcorrectone;
+            }
+            addcorrectone;
+        }
+    }
+}
+
+int checkIfPreviouslyIncluded(int eurelianSize, int edgesAdded, edge_s eurelianCircuit[eurelianSize], edge_s testCase) {
+    for (int i = 0; i < edgesAdded; i++) {
+        if (testCase.sourceBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber && testCase.destinationBomb.mineNumber == eurelianCircuit[i].destinationBomb.mineNumber ||
+            testCase.sourceBomb.mineNumber == eurelianCircuit[i].destinationBomb.mineNumber && testCase.destinationBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber) {
+            return true;
+        }
+    }
+    return true;
+}
+
+
+
 
 
 //Main function to find the solution of TSP using Christofides
@@ -219,7 +247,6 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     edge_s MST[bombAmount-1];
     double minCost = 0;
     makeMST(edgeAmount, bombAmount, &minCost, edgeArray, MST, bombs);
-    printf("%lf", minCost);
 
 
     //Step 2: Find nodes with odd degree (Amount of edges)
@@ -229,12 +256,14 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
 
 
     //Step 3: Perfect Matching
-    edge_s perfectMatch[oddCount/2];
-    perfectMatching(oddCount, oddVertices, perfectMatch);
+    int perfectSize = oddCount/2;
+    edge_s perfectMatch[perfectSize];
+    perfectMatching(oddCount, perfectSize, oddVertices, perfectMatch);
 
-    //Step 4: Create Eulerian Circuit
-    //int circuit[MAX * 2], circuitSize = 0;
-    //eulerianCircuit(graph, bombAmount, parent, matching, oddCount / 2, circuit, &circuitSize);
+    //Step 4: Create Eurelian Circuit
+    int eurelianSize = perfectSize+bombAmount-1;
+    edge_s eurelianC[eurelianSize];
+    eulerianCircuit(bombAmount, perfectSize, bombAmount-1, eurelianSize, MST, perfectMatch, eurelianC);
 
     //Step 5: Convert Eulerian to Hamiltonian
     //int path[MAX], pathSize = 0;
