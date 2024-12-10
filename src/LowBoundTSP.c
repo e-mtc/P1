@@ -28,6 +28,7 @@ void structToStruct(mine_s bombs[], int bombAmount, int edgeAmount, edge_s edgeA
             edgeArray[pathsMade].sourceBomb = bombs[i];
             edgeArray[pathsMade].destinationBomb = bombs[j];
             edgeArray[pathsMade].distanceBetween = calculateDistance(bombs[i], bombs[j]);
+            edgeArray[pathsMade].included = 0;
             pathsMade++;
         }
     }
@@ -187,6 +188,7 @@ void perfectMatching(int oddCount, int perfectSize, mine_s oddVertices[oddCount]
             if (!alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, perfectSize, perfectMatch) && !alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, perfectSize, perfectMatch)) {
                 perfectMatch[addedCount] = oddEdgeArray[j];
                 addedCount++;
+                break;
             }
         }
     }
@@ -206,29 +208,78 @@ int alreadyIncludedInPM(mine_s bomb, int perfectSize, edge_s perfectMatchArray[p
 
 void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[eurelianSize]) {
     int eAdded = 0;
+    int mstAdded = 0;
+    int perfMAdded = 0;
 
     eurelianCircuit[eAdded] = MST[0];
     eAdded++;
 
-    for (int i = 0; i < eurelianSize; i++) {
-        if (!checkIfPreviouslyIncluded(eurelianSize, eAdded, eurelianCircuit, ??)) {//Find ud af hvilken vi kigger på først
-            if (!checkIfHasPerfectmatching) {
-                addcorrectone;
-            }
-            addcorrectone;
+    int tempLength;
+
+    edge_s tempEdges[eurelianSize];
+    mergePerfMatchMST(MSTSize, perfectSize, eurelianSize, MST, perfectMatching, tempEdges);
+
+    for (int i = 0+eAdded; i < eurelianSize; i++) {
+        int perfMatch = nextIsPerfMatch(perfectSize, eurelianCircuit[eAdded-1], perfectMatching);
+
+        if (perfMatch && perfMAdded < perfectSize) {
+            addPerfectMatchEdge(eAdded, perfectSize, perfectMatching, eurelianCircuit);
+            perfMAdded++;
+        } else {
+            addMSTEdge();
+            mstAdded++;
         }
+        eAdded++;
     }
+    //checkForNextEntry(eurelianCircuit[eAdded-1]);
 }
 
 int checkIfPreviouslyIncluded(int eurelianSize, int edgesAdded, edge_s eurelianCircuit[eurelianSize], edge_s testCase) {
-    for (int i = 0; i < edgesAdded; i++) {
-        if (testCase.sourceBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber && testCase.destinationBomb.mineNumber == eurelianCircuit[i].destinationBomb.mineNumber ||
-            testCase.sourceBomb.mineNumber == eurelianCircuit[i].destinationBomb.mineNumber && testCase.destinationBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber) {
+
+
+
+}
+
+void mergePerfMatchMST(int MSTSize, int perfectSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s tempEdges[eurelianSize]) {
+    int edgesAdded = 0;
+
+    for (int i = 0; i < MSTSize; i++) {
+        tempEdges[edgesAdded] = MST[i];
+        edgesAdded++;
+    }
+
+    for (int j = 0; j < perfectSize; j++) {
+        tempEdges[edgesAdded] = perfectMatching[j];
+        edgesAdded++;
+    }
+}
+
+int nextIsPerfMatch(int perfectSize, edge_s prevEdge, edge_s perfectMatching[perfectSize]) {
+    for (int i = 0; i < perfectSize; i++) {
+        if (prevEdge.destinationBomb.mineNumber == perfectMatching[i].sourceBomb.mineNumber ||
+            prevEdge.destinationBomb.mineNumber == perfectMatching[i].destinationBomb.mineNumber) {
             return true;
         }
     }
-    return true;
+    return false;
 }
+
+
+void addPerfectMatchEdge(int edgesAdded, int perfectSize, edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[]) {
+    for (int i = 0; i < perfectSize; i++) {
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

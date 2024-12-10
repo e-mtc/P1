@@ -12,6 +12,7 @@ typedef struct {
     mine_s sourceBomb;
     mine_s destinationBomb;
     double distanceBetween;
+    int included;
 } edge_s;
 
 int findEdgeAmount(int bombAmount);
@@ -33,7 +34,9 @@ int alreadyIncludedInPM(mine_s bomb, int perfectSize, edge_s perfectMatchArray[p
 
 void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[eurelianSize]);
 int checkIfPreviouslyIncluded(int eurelianSize, int edgesAdded, edge_s eurelianCircuit[eurelianSize], edge_s testCase);
-
+void mergePerfMatchMST(int MSTSize, int perfectSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s tempEdges[eurelianSize]);
+int nextIsPerfMatch(int perfectSize, edge_s prevEdge, edge_s perfectMatching[perfectSize]);
+void addPerfectMatchEdge(int edgesAdded, int perfectSize, edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[]);
 
 
 void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]);
