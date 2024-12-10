@@ -3,6 +3,8 @@
 #include <math.h>
 #include "LowBoundTSP.h"
 
+#include <stdbool.h>
+
 // Calculate distance between two bombs
 double calculateDistance(mine_s bomb1, mine_s bomb2) {
     return (sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2))) * (bomb1.tw + bomb2.tw);
@@ -141,6 +143,7 @@ void makeMST(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArray[e
     kruskalAlgo(edgeAmount, bombAmount, minCost, edgeArray, MST, bombs);
 }
 
+//Identifies the odd vertices and saves them for later use
 void findOddVertices(int bombAmount, int oddCount, mine_s bombs[bombAmount], mine_s oddVertices[oddCount]) {
     int oddsAdded = 0;
 
@@ -156,6 +159,7 @@ void findOddVertices(int bombAmount, int oddCount, mine_s bombs[bombAmount], min
     }
 }
 
+//Counts the amount of odd vertices
 int findOddAmount(int bombAmount, mine_s bombs[bombAmount]) {
     int oddCount = 0;
 
@@ -168,11 +172,36 @@ int findOddAmount(int bombAmount, mine_s bombs[bombAmount]) {
     return oddCount;
 }
 
+//Finds perfect matching using greedy algorithm
+void perfectMatching(int oddCount, mine_s oddVertices[oddCount], edge_s perfectMatch[oddCount/2]) {
+    int addedCount = 0;
+    int edgeAmount = findEdgeAmount(oddCount);
 
+    edge_s oddEdgeArray[edgeAmount];
+    structToStruct(oddVertices, oddCount, edgeAmount, oddEdgeArray);
 
+    bubbleSort(edgeAmount, oddEdgeArray);
 
+    for (int i = 0; i < oddCount/2; i++) {
+        for (int j = 0+i; j < edgeAmount; j++) {
+            if (!alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, oddCount/2, perfectMatch) && !alreadyIncludedInPM(oddEdgeArray[j].sourceBomb, oddCount/2, perfectMatch)) {
+                perfectMatch[addedCount] = oddEdgeArray[j];
+                addedCount++;
+            }
+        }
+    }
+}
 
+//Checks if the current value the greedy algorithm is looking at is already included
+int alreadyIncludedInPM(mine_s bomb, int perfectSize, edge_s perfectMatchArray[perfectSize]) {
 
+    for (int i = 0; i < perfectSize; i++) {
+        if (bomb.mineNumber == perfectMatchArray[i].sourceBomb.mineNumber || bomb.mineNumber == perfectMatchArray[i].destinationBomb.mineNumber) {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 
@@ -200,8 +229,8 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
 
 
     //Step 3: Perfect Matching
-    //int matching[MAX][2] = {0};
-    //perfectMatching(graph, oddVertices, oddCount, matching);
+    edge_s perfectMatch[oddCount/2];
+    perfectMatching(oddCount, oddVertices, perfectMatch);
 
     //Step 4: Create Eulerian Circuit
     //int circuit[MAX * 2], circuitSize = 0;
