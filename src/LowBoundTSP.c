@@ -134,7 +134,6 @@ void unionSet(int u, int v, int parent[], int rank[]) {
     }
 }
 
-
 //Finds the minimum spanning tree to later be used in christofides to make an efficient route
 void makeMST(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]) {
     //First we sort the array of possible travelpoints so that we can access the minimum distance-costs
@@ -205,13 +204,13 @@ int alreadyIncludedInPM(mine_s bomb, int perfectSize, edge_s perfectMatchArray[p
     return false;
 }
 
-
+//Makes an eulerian circuit from the precalculated MST and perfectMatching graphs
 void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s perfectMatching[perfectSize], edge_s eurelianCircuit[eurelianSize]) {
     int eAdded = 0;
     int wasUsed;
 
-    eurelianCircuit[eAdded] = MST[0];
     MST[0].included = true;
+    eurelianCircuit[eAdded] = MST[0];
     eAdded++;
 
 
@@ -227,7 +226,6 @@ void eulerianCircuit(int bombAmount, int perfectSize, int MSTSize, int eurelianS
         eAdded++;
     }
 }
-
 
 //Figures out if the current destination point is included in the perfect match subgraph
 int nextIsPerfMatch(int perfectSize, edge_s prevEdge, edge_s perfectMatching[perfectSize]) {
@@ -263,7 +261,6 @@ void addPerfectMatchEdge(int edgesAdded, int perfectSize, int eurelianSize, int 
     }
 }
 
-
 //Adds an edge to Eurelian Circuit if the next is one located in MST[] and also is not already in the circuit
 void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s previousEdge, edge_s eurelianCircuit[eurelianSize]) {
     mine_s tempMine;
@@ -285,17 +282,82 @@ void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSiz
     }
 }
 
+//Shortcuts the Eurelian Cycle
 void eulerianShortcut(int shortcutSize, int eurelianSize, edge_s eurelianCircuit[eurelianSize], edge_s eurelianShortcut[shortcutSize]) {
+    edge_s tempEdge;
+    int eAdded = 0;
 
+    resetIncluded(eurelianSize, eurelianCircuit);
 
+    eurelianCircuit[0].included = true;
+    eurelianShortcut[eAdded] = eurelianCircuit[0];
+    eAdded++;
 
-
+    for (int i = 1; i < shortcutSize; i++){
+        //Finds next edge for the shortcut circuit
+        findNextPath(eurelianSize, shortcutSize, eAdded, &tempEdge, eurelianCircuit, eurelianShortcut[eAdded-1], eurelianShortcut);
+        //Adds edge to circuit
+        eurelianShortcut[eAdded] = tempEdge;
+        eAdded++;
+    }
 }
 
+//Resets 'included'
+void resetIncluded(int eurelianSize, edge_s eurelianCircuit[eurelianSize]) {
+    for (int i = 0; i < eurelianSize; i++) {
+        eurelianCircuit[i].included = false;
+    }
+}
 
+//Finds next edge for the shortcut circuit
+void findNextPath(int eurelianSize, int shortcutSize, int edgesAdded, edge_s *tempEdge, edge_s eurelianCircuit[eurelianSize], edge_s previousEdge, edge_s eurelianShortcut[shortcutSize]) {
 
+    for (int i = 0; i < eurelianSize; i++) {
+        //Makes sure we are considering the right edge for next addition
+        if (eurelianCircuit[i].sourceBomb.mineNumber == previousEdge.destinationBomb.mineNumber && eurelianCircuit[i].included == false) {
+            eurelianCircuit[i].included = true;
+            //Checks if we are returning to an already visited vertices if using the found edge
+            if (returningToUsedVertex(shortcutSize, edgesAdded, eurelianCircuit[i], eurelianShortcut)) {
 
+                createShortcut(eurelianSize, edgesAdded, tempEdge, eurelianCircuit, eurelianCircuit[i]);
+                break;
+            }
+            *tempEdge = eurelianCircuit[i];
+            break;
+        }
+    }
+}
 
+//Checks if we are returning to an already used vertex
+int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s cosideredVertex, edge_s eurelianShortcut[shortcutSize]) {
+    for (int i = 0; i < edgesAdded; i++) {
+        if (cosideredVertex.destinationBomb.mineNumber == eurelianShortcut[i].destinationBomb.mineNumber) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//Creates a shortcut in the eurelian circuit so that the edges do not visit same vertices twice
+void createShortcut(int eurelianSize, int edgesAdded, edge_s *newEdge, edge_s eurelianCircuit[eurelianSize], edge_s consideredEdge) {
+
+        for (int i = 0; i < eurelianSize; i++) {
+            if (consideredEdge.destinationBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber && eurelianCircuit[i].included == false) {
+                newEdge->sourceBomb = consideredEdge.sourceBomb;
+                newEdge->destinationBomb = eurelianCircuit[i].destinationBomb;
+                newEdge->distanceBetween = calculateDistance(newEdge->sourceBomb, newEdge->destinationBomb);
+                newEdge->included = true;
+                break;
+            }
+        }
+}
+
+//Convert tsp solution from edge_s array to mine_s array so that it can be printed
+void tspToMineArray(int bombAmount, edge_s eurelianShortcut[bombAmount], mine_s sortedBombs[bombAmount]) {
+    for (int i = 0; i < bombAmount; i++) {
+        sortedBombs[i] = eurelianShortcut[i].sourceBomb;
+    }
+}
 
 
 //Main function to find the solution of TSP using Christofides
@@ -324,26 +386,31 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     edge_s perfectMatch[perfectSize];
     perfectMatching(oddCount, perfectSize, oddVertices, perfectMatch);
 
+
     //Step 4: Create Eurelian Circuit
     int eurelianSize = perfectSize+bombAmount-1;
     edge_s eurelianC[eurelianSize];
     eulerianCircuit(bombAmount, perfectSize, bombAmount-1, eurelianSize, MST, perfectMatch, eurelianC);
 
 
-    //test
-    printf("\nEurelian cycle:\n");
-    for (int i = 0; i < eurelianSize; i++) {
-        printf("%d -- %d\n", eurelianC[i].sourceBomb.mineNumber, eurelianC[i].destinationBomb.mineNumber);
-    }
-
     //Step 5: Shortcut edges that repeat to already visited vertices
     edge_s eurelianShortcut[bombAmount];
     eulerianShortcut(bombAmount, eurelianSize, eurelianC, eurelianShortcut);
 
+    printf("\n\n\n---------SHORTCUT TEST---------\n");
+    //test
+    printf("\nEurelian Shortcut:\n");
+    for (int i = 0; i < bombAmount; i++) {
+        printf("%d -- %d   %d, %d -- %d, %d\n", eurelianShortcut[i].sourceBomb.mineNumber, eurelianShortcut[i].destinationBomb.mineNumber, eurelianShortcut[i].sourceBomb.x, eurelianShortcut[i].sourceBomb.y, eurelianShortcut[i].destinationBomb.x, eurelianShortcut[i].destinationBomb.y);
+    }
 
-    //Convert path[] to struct array - Make the changes in sortedArray[]
-    //pathToStructArray(path, bombAmount, bombs, sortedArray);
 
+    //Convert eurelianShortcut[] to mine_s struct array so that it can be used for printing - Make the changes in sortedArray[]
+    tspToMineArray(bombAmount, eurelianShortcut, sortedBombs);
+    printf("\n\n\n---------MINE_S TEST---------\n");
+    printf("\nSorted mine_s array:\n");
+    for (int i = 0; i < bombAmount; i++) {
+        printf("mine %d: %d, %d TW: %lf\n", sortedBombs[i].mineNumber, sortedBombs[i].x, sortedBombs[i].y, sortedBombs[i].tw);
+    }
 
-    //Free allocated memory
 }

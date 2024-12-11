@@ -38,5 +38,12 @@ void addPerfectMatchEdge(int edgesAdded, int perfectSize, int eurelianSize, int 
 void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSize], edge_s previousEdge, edge_s eurelianCircuit[]);
 
 
+void eulerianShortcut(int shortcutSize, int eurelianSize, edge_s eurelianCircuit[eurelianSize], edge_s eurelianShortcut[shortcutSize]);
+void resetIncluded(int eurelianSize, edge_s eurelianCircuit[eurelianSize]);
+void findNextPath(int eurelianSize, int shortcutSize, int edgesAdded, edge_s *tempEdge, edge_s eurelianCircuit[eurelianSize], edge_s previousEdge, edge_s eurelianShortcut[shortcutSize]);
+int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s cosideredVertex, edge_s eurelianShortcut[shortcutSize]);
+void createShortcut(int eurelianSize, int edgesAdded, edge_s *newEdge, edge_s eurelianCircuit[eurelianSize], edge_s consideredEdge);
+
+
 void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]);
     void makeMST(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]);
