@@ -38,6 +38,7 @@ void primMST(double graph[MAX][MAX], int n, int parent[]) {
 
     for (int count = 0; count < n - 1; count++) {
         int u = findMinKey(key, mstSet, n);
+        printf("mstSet[%d] = 1\n", u);
         mstSet[u] = 1;
 
         for (int i = 0; i < n; i++) {
@@ -47,6 +48,9 @@ void primMST(double graph[MAX][MAX], int n, int parent[]) {
                 key[i] = graph[u][i];
                 printf("key[%d] = graph[%d][%d]: %lf\n", i, u, i, key[i]);
             }
+        }
+        for (int i = 0; i < n; i++) {
+            printf("parent[%d] = %d: %d\n", i, u, parent[i]);
         }
     }
 }
@@ -65,7 +69,7 @@ void findOddVertices(int n, int parent[], int oddVertices[], int *oddCount) {
             oddVertices[(*oddCount)++] = i;
             printf("*oddCount: %d\n", *oddCount);
             printf("degree[%d]: %d\n", i, degree[i]);
-            printf("oddVertices[(*oddCount)++]: %d\n", oddVertices[(*oddCount)]);
+            printf("oddVertices[(*oddCount)++]: %d\n", oddVertices[*oddCount]);
         }
     }
 }
