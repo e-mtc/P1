@@ -7,12 +7,12 @@
 
 #include "VisualOutput.h"
 #include "bruteforce.h"
+#include "LowBoundTSP.h"
 
 #define MAX_STR_LNGTH 30
 
 int main(void) {
     clock_t start, end;
-    double cpu_time_used;
 
     /* Including/calling scanCords */
     char filename[MAX_STR_LNGTH];
@@ -21,7 +21,6 @@ int main(void) {
     scanf(" %s", filename);
     if (strlen(filename) > 30) fprintf(stderr, "Error: Filename too long\n");
 
-    start = clock();
     unsigned int mineCount = countMines(filename);
 
     mine_s minefield[mineCount];
@@ -34,6 +33,11 @@ int main(void) {
     /* Including/calling VisualOutput */
     visualOutput(row, column, minefield, mineCount); // HUSK: Generalisér størrelse af row og column
 
+    printf("\n");
+
+    // -----------------BRUTEFORCE---------------
+    start = clock();
+    printf("-----------------BRUTEFORCE---------------");
     /* Including/calling bruteforce */
     mine_s *shortest = getShortestPath(minefield, mineCount);
     if (shortest == NULL) {
@@ -52,10 +56,50 @@ int main(void) {
     printf("\n");
 
     printf("Length of the shortest path:\n");
-    printf("%lf\n", truePathLength(shortest, mineCount));
+    double bruteLength = truePathLength(shortest, mineCount);
+    printf("%lf\n", bruteLength);
     end = clock();
-    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Execution time: %f seconds\n", cpu_time_used);
+    double cpu_time_used_brute = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Execution time: %f seconds\n", cpu_time_used_brute);
+    printf("\n");
+
+    //------------CHRISTOFIDES----------------
+    start = clock();
+    printf("-----------------CHRISTOFIDES---------------");
+    mine_s minefieldChristo[mineCount];
+    christofides(mineCount, minefield, minefieldChristo);
+
+    printf("\n");
+
+    for (unsigned int i = 0; i < mineCount; i++) {
+        printf("%c: (%u,%u)\n", i + 65, minefieldChristo[i].x, minefieldChristo[i].y);
+    }
+    printf("\n");
+
+    /* Including/calling Anas' version of VisualOutput */
+    showMinefield(row, column, minefieldChristo, mineCount);
+    printf("\n");
+
+    printf("Length of the shortest path:\n");
+    double christoLength = truePathLength(minefieldChristo, mineCount);
+    printf("%lf\n", christoLength);
+    end = clock();
+    double cpu_time_used_christo = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("Execution time: %f seconds\n\n", cpu_time_used_christo);
+
+
+    //-------END OF ALGOS----------
+    printf("-----------------SUMMARY---------------");
+    printf("\n");
+    printf("The length of Brute-force algorithm was %.2lf\n", bruteLength);
+    printf("The execution time of Brute-force algorithm was %.2lf\n\n", cpu_time_used_brute);
+
+    printf("The length of Christofides algorithm was %.2lf\n", christoLength);
+    printf("The execution time of Christofides algorithm was %.2lf\n\n", cpu_time_used_christo);
+
+    printf("Christofides is %.2lf times longer than Brute-force.\n", christoLength/bruteLength);
+    printf("Christofides is %.2lf times faster than Brute-force.\n", cpu_time_used_brute/cpu_time_used_christo);
+
     return EXIT_SUCCESS;
 }
 

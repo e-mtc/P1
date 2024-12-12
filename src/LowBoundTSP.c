@@ -3,10 +3,25 @@
 #include "LowBoundTSP.h"
 #include <stdbool.h>
 
+
 // Calculate distance between two bombs
 double calculateDistance(mine_s bomb1, mine_s bomb2) {
-    return (sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2))) * (bomb1.tw + bomb2.tw);
+    mine_s temp; // temp variable for swapping mine values
+    // swap values to avoid negative numbers
+    if (bomb1.x < bomb2.x) {
+        temp.x = bomb1.x;
+        bomb1.x = bomb2.x;
+        bomb2.x = temp.x;
+    }
+    if (bomb1.y < bomb2.y) {
+        temp.y = bomb1.y;
+        bomb1.y = bomb2.y;
+        bomb2.y = temp.y;
+    }
+    // calculate distance between two mines and return
+    return sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)) * (bomb1.tw + bomb2.tw);
 }
+
 
 //Finds amount of edges in travelArray to be build
 int findEdgeAmount(int bombAmount) {
@@ -71,7 +86,7 @@ void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s sortedA
     //Function to initialize parent[] and rank[]
     makeSet(parent, rank, edgeAmount);
 
-    printf("Following are the edges in the constructed MST\n");
+    // printf("Following are the edges in the constructed MST\n");
     for (int i = 0; i < edgeAmount; ++i) {
         int v1 = findParent(parent, sortedArray[i].sourceBomb.mineNumber);
         int v2 = findParent(parent, sortedArray[i].destinationBomb.mineNumber);
@@ -90,12 +105,12 @@ void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s sortedA
             MST[j].destinationBomb = sortedArray[i].destinationBomb;
             MST[j].distanceBetween = sortedArray[i].distanceBetween;
             MST[j].included = false;
-            printf("%d -- %d == %lf\n", MST[j].sourceBomb.mineNumber, MST[j].destinationBomb.mineNumber, MST[j].distanceBetween);
+            // printf("%d -- %d == %lf\n", MST[j].sourceBomb.mineNumber, MST[j].destinationBomb.mineNumber, MST[j].distanceBetween);
             ++j;
         }
     }
 
-    printf("Minimum Cost Spanning Tree: %lf\n", *minCost);
+    // printf("Minimum Cost Spanning Tree: %lf\n", *minCost);
 }
 
 //Initialization of arrays for later use
@@ -474,19 +489,21 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     edge_s eurelianC[eurelianSize];
     eulerianCircuit(perfectSize, bombAmount-1, eurelianSize, MST, perfectMatch, eurelianC);
 
+    /*
     //TestPrint
     printf("\n\n\n---------EULERIAN TEST---------\n");
     printf("\nEulerian Shortcut:\n");
     for (int i = 0; i < eurelianSize; i++) {
         printf("%d -- %d   %d, %d -- %d, %d\n", eurelianC[i].sourceBomb.mineNumber, eurelianC[i].destinationBomb.mineNumber, eurelianC[i].sourceBomb.x, eurelianC[i].sourceBomb.y, eurelianC[i].destinationBomb.x, eurelianC[i].destinationBomb.y);
     }
-
+    */
 
     //Step 5: Shortcut edges that repeat to already visited vertices
     edge_s eurelianShortcut[bombAmount];
     double shortcutCost = 0;
     eulerianShortcut(bombAmount, eurelianSize, &shortcutCost, eurelianC, eurelianShortcut);
 
+    /*
     //TestPrint
     printf("\n\n\n---------SHORTCUT TEST---------\n");
     printf("\nEurelian Shortcut:\n");
@@ -494,15 +511,17 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
         printf("%d -- %d   %d, %d -- %d, %d\n", eurelianShortcut[i].sourceBomb.mineNumber, eurelianShortcut[i].destinationBomb.mineNumber, eurelianShortcut[i].sourceBomb.x, eurelianShortcut[i].sourceBomb.y, eurelianShortcut[i].destinationBomb.x, eurelianShortcut[i].destinationBomb.y);
     }
     printf("%lf", shortcutCost);
-
+    */
 
     //Convert eurelianShortcut[] to mine_s struct array so that it can be used for printing - Make the changes in sortedArray[]
     tspToMineArray(bombAmount, eurelianShortcut, sortedBombs);
 
+    /*
     //TestPrint
     printf("\n\n\n---------MINE_S TEST---------\n");
     printf("\nSorted mine_s array:\n");
     for (int i = 0; i < bombAmount; i++) {
         printf("mine %d: %d, %d TW: %lf\n", sortedBombs[i].mineNumber, sortedBombs[i].x, sortedBombs[i].y, sortedBombs[i].tw);
     }
+    */
 }

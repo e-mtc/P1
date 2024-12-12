@@ -1,11 +1,4 @@
-typedef struct
-{
-    int x; // x-coordinate of mine
-    int y; // y-coordinate of mine
-    double tw; // Terrain-weight (coefficient) at mine location
-    int mineNumber; // Mine number on creation - Used to identify mine in functions
-    int edgeAmount; // Edges in created tree MST
-} mine_s;
+#include "scanCords.h"
 
 typedef struct // Edge between two vertices moving from vertex 1 to vertex 2
 {
