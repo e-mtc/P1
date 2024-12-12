@@ -78,7 +78,7 @@ void visualMinefieldSize(const mine_s input[], unsigned int *row, unsigned int *
             *column = input[i].x;
         }
     }
-    // +1 due to array indexing for later use
+    // +2 due to array indexing for later use
     *row += 2;
     *column += 2;
 }

@@ -52,7 +52,7 @@ int main(void) {
     printf("\n");
 
     /* Including/calling Anas' version of VisualOutput */
-    showMinefield(row, column, shortest, mineCount); // HUSK: Generalisér størrelse af row og column + minecount (mineQuantity?)
+    showMinefield(row, column, shortest, mineCount);
     printf("\n");
 
     printf("Length of the shortest path:\n");
