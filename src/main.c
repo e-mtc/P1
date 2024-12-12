@@ -12,8 +12,7 @@
 #define MAX_STR_LNGTH 30
 
 int main(void) {
-    clock_t start, end;
-
+    double start, end;
     /* Including/calling scanCords */
     char filename[MAX_STR_LNGTH];
 
@@ -59,9 +58,8 @@ int main(void) {
     double bruteLength = truePathLength(shortest, mineCount);
     printf("%lf\n", bruteLength);
     end = clock();
-    double cpu_time_used_brute = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("Execution time: %f seconds\n", cpu_time_used_brute);
-    printf("\n");
+    double cpu_time_used_brute = (end - start) / CLOCKS_PER_SEC;
+    printf("Execution time: %f seconds\n\n", cpu_time_used_brute);
 
     //------------CHRISTOFIDES----------------
     start = clock();
@@ -84,22 +82,20 @@ int main(void) {
     double christoLength = truePathLength(minefieldChristo, mineCount);
     printf("%lf\n", christoLength);
     end = clock();
-    double cpu_time_used_christo = ((double) (end - start)) / CLOCKS_PER_SEC;
+    double cpu_time_used_christo = (end - start) / CLOCKS_PER_SEC;
     printf("Execution time: %f seconds\n\n", cpu_time_used_christo);
 
-
-    //-------END OF ALGOS----------
+    //-------END OF ALGORITHMS----------
     printf("-----------------SUMMARY---------------");
     printf("\n");
-    printf("The length of Brute-force algorithm was %.2lf\n", bruteLength);
-    printf("The execution time of Brute-force algorithm was %.2lf\n\n", cpu_time_used_brute);
+    printf("Length of Brute-force algorithm: %.2lf\n", bruteLength);
+    printf("Execution time of Brute-force algorithm: %.2lf\n\n", cpu_time_used_brute);
 
-    printf("The length of Christofides algorithm was %.2lf\n", christoLength);
-    printf("The execution time of Christofides algorithm was %.2lf\n\n", cpu_time_used_christo);
+    printf("Length of Christofides algorithm: %.2lf\n", christoLength);
+    printf("Execution time of Christofides algorithm: %.2lf\n\n", cpu_time_used_christo);
 
     printf("Christofides is %.2lf times longer than Brute-force.\n", christoLength/bruteLength);
     printf("Christofides is %.2lf times faster than Brute-force.\n", cpu_time_used_brute/cpu_time_used_christo);
 
     return EXIT_SUCCESS;
 }
-

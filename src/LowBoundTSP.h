@@ -33,7 +33,7 @@ void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSiz
 void eulerianShortcut(int shortcutSize, int eurelianSize, double *shortcutCost, edge_s eurelianCircuit[eurelianSize], edge_s eurelianShortcut[shortcutSize]);
 void resetIncluded(int eurelianSize, edge_s eurelianCircuit[eurelianSize]);
 void findNextPath(int eurelianSize, int shortcutSize, int edgesAdded, edge_s *tempEdge, edge_s eurelianCircuit[eurelianSize], edge_s previousEdge, edge_s eurelianShortcut[shortcutSize]);
-int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s cosideredVertex, edge_s eurelianShortcut[shortcutSize]);
+int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s consideredVertex, edge_s eurelianShortcut[shortcutSize]);
 void createShortcut(int eurelianSize, int edgesAdded, edge_s *newEdge, edge_s eurelianCircuit[eurelianSize], edge_s consideredEdge);
 void rearrageEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]);
 

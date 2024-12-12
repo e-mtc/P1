@@ -1,8 +1,6 @@
-#include <stdio.h>
 #include <math.h>
 #include "LowBoundTSP.h"
 #include <stdbool.h>
-
 
 // Calculate distance between two bombs
 double calculateDistance(mine_s bomb1, mine_s bomb2) {
@@ -21,7 +19,6 @@ double calculateDistance(mine_s bomb1, mine_s bomb2) {
     // calculate distance between two mines and return
     return sqrt(pow(bomb1.x - bomb2.x, 2) + pow(bomb1.y - bomb2.y, 2)) * (bomb1.tw + bomb2.tw);
 }
-
 
 //Finds amount of edges in travelArray to be build
 int findEdgeAmount(int bombAmount) {
@@ -49,11 +46,11 @@ void structToStruct(mine_s bombs[], int bombAmount, int edgeAmount, edge_s edgeA
 
 //Sorts the array
 void bubbleSort(int edgeAmount, edge_s edgeArray[edgeAmount]){
-    //Temporary values are intialized
+    //Temporary values are initialized
     mine_s tempSource, tempDestination;
     double tempDistance;
 
-    //We run through the 2D arrays weight value edgeAmount-1 times since the last postition is assumed correct if the rest is
+    //We run through the 2D arrays weight value edgeAmount-1 times since the last position is assumed correct if the rest is
     for (int i = 0; i < (edgeAmount - 1); ++i){
         //This is run through EdgeAmount-1-i times since the comparison function is unneeded on already assumed correct values(i)
         for (int j = 0; j < edgeAmount - 1 - i; ++j ){
@@ -77,7 +74,7 @@ void bubbleSort(int edgeAmount, edge_s edgeArray[edgeAmount]){
     }
 }
 
-//Runs the kruskal algorithm to make a minimum spanning tree from a distance-sorted index of travelpoints
+//Runs the kruskal algorithm to make a minimum spanning tree from a distance-sorted index of travel points
 void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s sortedArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]) {
     int parent[edgeAmount];
     int rank[edgeAmount];
@@ -86,7 +83,6 @@ void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s sortedA
     //Function to initialize parent[] and rank[]
     makeSet(parent, rank, edgeAmount);
 
-    // printf("Following are the edges in the constructed MST\n");
     for (int i = 0; i < edgeAmount; ++i) {
         int v1 = findParent(parent, sortedArray[i].sourceBomb.mineNumber);
         int v2 = findParent(parent, sortedArray[i].destinationBomb.mineNumber);
@@ -105,12 +101,9 @@ void kruskalAlgo(int edgeAmount, int bombAmount, double *minCost, edge_s sortedA
             MST[j].destinationBomb = sortedArray[i].destinationBomb;
             MST[j].distanceBetween = sortedArray[i].distanceBetween;
             MST[j].included = false;
-            // printf("%d -- %d == %lf\n", MST[j].sourceBomb.mineNumber, MST[j].destinationBomb.mineNumber, MST[j].distanceBetween);
             ++j;
         }
     }
-
-    // printf("Minimum Cost Spanning Tree: %lf\n", *minCost);
 }
 
 //Initialization of arrays for later use
@@ -148,9 +141,9 @@ void unionSet(int u, int v, int parent[], int rank[]) {
     }
 }
 
-//Finds the minimum spanning tree to later be used in christofides to make an efficient route
+//Finds the minimum spanning tree to later be used in Christofides to make an efficient route
 void makeMST(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]) {
-    //First we sort the array of possible travelpoints so that we can access the minimum distance-costs
+    //First we sort the array of possible travel points so that we can access the minimum distance-costs
     bubbleSort(edgeAmount, edgeArray);
 
     //We then apply our sorted array to our kruskal algorithm to get a MST
@@ -227,7 +220,6 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
     eurelianCircuit[eAdded] = MST[0];
     eAdded++;
 
-
     for (int i = 1; i < eurelianSize; i++) {
         wasUsed = false;
         if (nextIsPerfMatch(perfectSize, eurelianCircuit[eAdded-1], perfectMatching)) {
@@ -237,7 +229,6 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
         if (!wasUsed) {
             addMSTEdge(eAdded, MSTSize, eurelianSize, MST, eurelianCircuit[eAdded-1], eurelianCircuit);
         }
-
 
         //Checks if we are ending a cycle
         if (eurelianCircuit[eAdded].sourceBomb.mineNumber != eurelianCircuit[eAdded-1].destinationBomb.mineNumber) {
@@ -284,8 +275,6 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
                                 MST[j].sourceBomb = tempMine;
                             }
 
-
-
                             rearrageEulerian(k, eAdded, eurelianSize, eurelianCircuit);
 
                             MST[j].included = true;
@@ -303,7 +292,6 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
         eAdded++;
     }
 }
-
 
 //Rearranges the eulerian tour if there is a cycle detected, so that it is still in order
 void rearrageEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]) {
@@ -426,9 +414,9 @@ void findNextPath(int eurelianSize, int shortcutSize, int edgesAdded, edge_s *te
 }
 
 //Checks if we are returning to an already used vertex
-int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s cosideredVertex, edge_s eurelianShortcut[shortcutSize]) {
+int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s consideredVertex, edge_s eurelianShortcut[shortcutSize]) {
     for (int i = 0; i < edgesAdded; i++) {
-        if ((cosideredVertex.destinationBomb.mineNumber == eurelianShortcut[i].destinationBomb.mineNumber) || (cosideredVertex.destinationBomb.mineNumber == eurelianShortcut[0].sourceBomb.mineNumber) && (edgesAdded != shortcutSize-1)) {
+        if ((consideredVertex.destinationBomb.mineNumber == eurelianShortcut[i].destinationBomb.mineNumber) || (consideredVertex.destinationBomb.mineNumber == eurelianShortcut[0].sourceBomb.mineNumber) && (edgesAdded != shortcutSize-1)) {
             return true;
         }
     }
@@ -437,7 +425,6 @@ int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s cosideredVer
 
 //Creates a shortcut in the eurelian circuit so that the edges do not visit same vertices twice
 void createShortcut(int eurelianSize, int edgesAdded, edge_s *newEdge, edge_s eurelianCircuit[eurelianSize], edge_s consideredEdge) {
-
         for (int i = 0; i < eurelianSize; i++) {
             if (consideredEdge.destinationBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber && eurelianCircuit[i].included == false) {
                 newEdge->sourceBomb = consideredEdge.sourceBomb;
@@ -456,7 +443,6 @@ void tspToMineArray(int bombAmount, edge_s eurelianShortcut[bombAmount], mine_s 
     }
 }
 
-
 //Main function to find the solution of TSP using Christofides
 void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]) {
     //Finds the amount of edges in edgeArray
@@ -471,57 +457,26 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     double minCost = 0;
     makeMST(edgeAmount, bombAmount, &minCost, edgeArray, MST, bombs);
 
-
     //Step 2: Find nodes with odd degree (Amount of edges)
     int oddCount = findOddAmount(bombAmount, bombs);
     mine_s oddVertices[oddCount];
     findOddVertices(bombAmount, oddCount, bombs, oddVertices);
-
 
     //Step 3: Perfect Matching
     int perfectSize = oddCount/2;
     edge_s perfectMatch[perfectSize];
     perfectMatching(oddCount, perfectSize, oddVertices, perfectMatch);
 
-
     //Step 4: Create Eurelian Circuit
     int eurelianSize = perfectSize+bombAmount-1;
     edge_s eurelianC[eurelianSize];
     eulerianCircuit(perfectSize, bombAmount-1, eurelianSize, MST, perfectMatch, eurelianC);
-
-    /*
-    //TestPrint
-    printf("\n\n\n---------EULERIAN TEST---------\n");
-    printf("\nEulerian Shortcut:\n");
-    for (int i = 0; i < eurelianSize; i++) {
-        printf("%d -- %d   %d, %d -- %d, %d\n", eurelianC[i].sourceBomb.mineNumber, eurelianC[i].destinationBomb.mineNumber, eurelianC[i].sourceBomb.x, eurelianC[i].sourceBomb.y, eurelianC[i].destinationBomb.x, eurelianC[i].destinationBomb.y);
-    }
-    */
 
     //Step 5: Shortcut edges that repeat to already visited vertices
     edge_s eurelianShortcut[bombAmount];
     double shortcutCost = 0;
     eulerianShortcut(bombAmount, eurelianSize, &shortcutCost, eurelianC, eurelianShortcut);
 
-    /*
-    //TestPrint
-    printf("\n\n\n---------SHORTCUT TEST---------\n");
-    printf("\nEurelian Shortcut:\n");
-    for (int i = 0; i < bombAmount; i++) {
-        printf("%d -- %d   %d, %d -- %d, %d\n", eurelianShortcut[i].sourceBomb.mineNumber, eurelianShortcut[i].destinationBomb.mineNumber, eurelianShortcut[i].sourceBomb.x, eurelianShortcut[i].sourceBomb.y, eurelianShortcut[i].destinationBomb.x, eurelianShortcut[i].destinationBomb.y);
-    }
-    printf("%lf", shortcutCost);
-    */
-
     //Convert eurelianShortcut[] to mine_s struct array so that it can be used for printing - Make the changes in sortedArray[]
     tspToMineArray(bombAmount, eurelianShortcut, sortedBombs);
-
-    /*
-    //TestPrint
-    printf("\n\n\n---------MINE_S TEST---------\n");
-    printf("\nSorted mine_s array:\n");
-    for (int i = 0; i < bombAmount; i++) {
-        printf("mine %d: %d, %d TW: %lf\n", sortedBombs[i].mineNumber, sortedBombs[i].x, sortedBombs[i].y, sortedBombs[i].tw);
-    }
-    */
 }

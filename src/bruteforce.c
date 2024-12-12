@@ -71,7 +71,7 @@ void findShortestPath(mine_s *shortestPath, mine_s *minefield, mine_s *path, uns
         // call recursively -> choose next mine in path 
         // stop if every mine in the field is already in the path 
         findShortestPath(shortestPath, remainingMinefield, path, depth + 1, mineCount);
-        free(remainingMinefield); // free remaningMinefield since it will not be used beyond this point
+        free(remainingMinefield); // free remainingMinefield since it will not be used beyond this point
     }
 }   
 
@@ -105,7 +105,7 @@ double truePathLength(const mine_s *path, unsigned int mineCount) {
 
 double calculateLength(mine_s mine1, mine_s mine2) {
     mine_s temp; // temp variable for swapping mine values
-    // swapvalues to avoid negative numbers 
+    // swap values to avoid negative numbers
     if (mine1.x < mine2.x) {
         temp.x = mine1.x;
         mine1.x = mine2.x;

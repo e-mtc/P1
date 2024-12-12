@@ -1,15 +1,9 @@
-//
-// Created by ramoj on 05/11/2024.
-//
 #include <stdio.h>
-#include "stdlib.h"
-#include "string.h"
 #include "VisualOutput.h"
 #include "scanCords.h"
 
 //Rasmus' version
 void visualOutput(int row, int column, const mine_s input[], unsigned int mineCount) {
-
     // Initialize variables and matrix
     char matrix[row][column];
 
@@ -38,7 +32,6 @@ void visualOutput(int row, int column, const mine_s input[], unsigned int mineCo
 
 // Anas' version
 void showMinefield(int row, int column, const mine_s input[], unsigned int mineCount) {
-
     // Initialize variables and matrix
     char matrix[row][column];
 
