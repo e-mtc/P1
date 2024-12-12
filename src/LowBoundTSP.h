@@ -41,3 +41,5 @@ void rearrangeEulerian(int connectingIndex, int edgesAdded, int eurelianSize, ed
 void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]);
     void makeMST(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]);
     void tspToMineArray(int bombAmount, edge_s eurelianShortcut[bombAmount], mine_s sortedBombs[bombAmount]);
+    void rearrangeArray(int bombAmount, mine_s sortedBombs[bombAmount]);
+        int findDesiredStartIndex(int bombAmount, mine_s sortedBombs[bombAmount]);
