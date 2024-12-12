@@ -222,7 +222,84 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
         if (!wasUsed) {
             addMSTEdge(eAdded, MSTSize, eurelianSize, MST, eurelianCircuit[eAdded-1], eurelianCircuit);
         }
+
+
+        //Checks if we are ending a cycle
+        if (eurelianCircuit[eAdded].sourceBomb.mineNumber != eurelianCircuit[eAdded-1].destinationBomb.mineNumber) {
+            for (int j = 0; j < perfectSize; j++) {
+                for (int k = 0; k < eAdded-1; k++)
+                {
+                    if ((eurelianCircuit[k].destinationBomb.mineNumber == perfectMatching[j].sourceBomb.mineNumber && perfectMatching[j].included == false) ||
+                        (eurelianCircuit[k].destinationBomb.mineNumber == perfectMatching[j].destinationBomb.mineNumber && perfectMatching[j].included == false)) {
+
+                        if (eurelianCircuit[k].destinationBomb.mineNumber == perfectMatching[j].destinationBomb.mineNumber) {
+                            mine_s tempMine;
+
+                            tempMine = perfectMatching[j].destinationBomb;
+                            perfectMatching[j].destinationBomb = perfectMatching[j].sourceBomb;
+                            perfectMatching[j].sourceBomb = tempMine;
+                        }
+
+                        rearrageEulerian(k, eAdded, eurelianSize, eurelianCircuit);
+
+                        perfectMatching[j].included = true;
+                        eurelianCircuit[eAdded] = perfectMatching[j];
+                        wasUsed = true;
+                        break;
+                    }
+                }
+                if (wasUsed == true) {
+                    break;
+                }
+            }
+
+            if (!wasUsed) {
+                for (int j = 0; j < MSTSize; j++) {
+                    for (int k = 0; k < eAdded; k++)
+                    {
+                        if ((eurelianCircuit[k].destinationBomb.mineNumber == MST[j].sourceBomb.mineNumber && MST[j].included == false) ||
+                            (eurelianCircuit[k].destinationBomb.mineNumber == MST[j].destinationBomb.mineNumber && MST[j].included == false)) {
+
+                            if (eurelianCircuit[k].destinationBomb.mineNumber == MST[j].destinationBomb.mineNumber) {
+                                mine_s tempMine;
+
+
+                                tempMine = MST[j].destinationBomb;
+                                MST[j].destinationBomb = MST[j].sourceBomb;
+                                MST[j].sourceBomb = tempMine;
+                            }
+
+                            rearrageEulerian(k, eAdded, eurelianSize, eurelianCircuit);
+
+                            MST[j].included = true;
+                            eurelianCircuit[eAdded] = MST[j];
+                            wasUsed = true;
+                            break;
+                        }
+                    }
+                    if (wasUsed == true) {
+                        break;
+                    }
+                }
+            }
+        }
         eAdded++;
+    }
+}
+
+//Rearranges the eulerian tour if there is a cycle detected, so that it is still in order
+void rearrageEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]) {
+    edge_s tempEdge;
+
+    for (int i = connectingIndex; i < edgesAdded-1; i++) {
+        tempEdge = eurelianCircuit[edgesAdded-1];
+
+        for (int j = edgesAdded; 0 < j; j--) {
+
+            eurelianCircuit[j] = eurelianCircuit[j-1];
+        }
+
+        eurelianCircuit[0] = tempEdge;
     }
 }
 
@@ -277,6 +354,7 @@ void addMSTEdge(int edgesAdded, int MSTSize, int eurelianSize, edge_s MST[MSTSiz
             }
             MST[i].included = true;
             eurelianCircuit[edgesAdded] = MST[i];
+            break;
         }
     }
 }
@@ -332,7 +410,7 @@ void findNextPath(int eurelianSize, int shortcutSize, int edgesAdded, edge_s *te
 //Checks if we are returning to an already used vertex
 int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s cosideredVertex, edge_s eurelianShortcut[shortcutSize]) {
     for (int i = 0; i < edgesAdded; i++) {
-        if (cosideredVertex.destinationBomb.mineNumber == eurelianShortcut[i].destinationBomb.mineNumber) {
+        if ((cosideredVertex.destinationBomb.mineNumber == eurelianShortcut[i].destinationBomb.mineNumber) || (cosideredVertex.destinationBomb.mineNumber == eurelianShortcut[0].sourceBomb.mineNumber) && (edgesAdded != shortcutSize-1)) {
             return true;
         }
     }
@@ -392,6 +470,13 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     int eurelianSize = perfectSize+bombAmount-1;
     edge_s eurelianC[eurelianSize];
     eulerianCircuit(perfectSize, bombAmount-1, eurelianSize, MST, perfectMatch, eurelianC);
+
+    //TestPrint
+    printf("\n\n\n---------EULERIAN TEST---------\n");
+    printf("\nEulerian Shortcut:\n");
+    for (int i = 0; i < eurelianSize; i++) {
+        printf("%d -- %d   %d, %d -- %d, %d\n", eurelianC[i].sourceBomb.mineNumber, eurelianC[i].destinationBomb.mineNumber, eurelianC[i].sourceBomb.x, eurelianC[i].sourceBomb.y, eurelianC[i].destinationBomb.x, eurelianC[i].destinationBomb.y);
+    }
 
 
     //Step 5: Shortcut edges that repeat to already visited vertices
