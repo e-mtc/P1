@@ -45,5 +45,6 @@ void createShortcut(int eurelianSize, int edgesAdded, edge_s *newEdge, edge_s eu
 void rearrageEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]);
 
 
+
 void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]);
     void makeMST(int edgeAmount, int bombAmount, double *minCost, edge_s edgeArray[edgeAmount], edge_s MST[bombAmount-1], mine_s bombs[bombAmount]);
