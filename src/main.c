@@ -61,9 +61,14 @@ int main(void) {
     double cpu_time_used_brute = (end - start) / CLOCKS_PER_SEC;
     printf("Execution time: %f seconds\n\n", cpu_time_used_brute);
 
+
+
+
     //------------CHRISTOFIDES----------------
+    printf("-----------------CHRISTOFIDES---------------\n\n");
+    printf("Start point: (%u,%u)\n", shortest[0].x, shortest[0].y);
+
     start = clock();
-    printf("-----------------CHRISTOFIDES---------------");
     mine_s minefieldChristo[mineCount];
     christofides(mineCount, minefield, minefieldChristo);
 

@@ -246,7 +246,7 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
                             perfectMatching[j].sourceBomb = tempMine;
                         }
 
-                        rearrageEulerian(k, eAdded, eurelianSize, eurelianCircuit);
+                        rearrangeEulerian(k, eAdded, eurelianSize, eurelianCircuit);
 
                         perfectMatching[j].included = true;
                         eurelianCircuit[eAdded] = perfectMatching[j];
@@ -275,7 +275,7 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
                                 MST[j].sourceBomb = tempMine;
                             }
 
-                            rearrageEulerian(k, eAdded, eurelianSize, eurelianCircuit);
+                            rearrangeEulerian(k, eAdded, eurelianSize, eurelianCircuit);
 
                             MST[j].included = true;
                             eurelianCircuit[eAdded] = MST[j];
@@ -294,7 +294,7 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
 }
 
 //Rearranges the eulerian tour if there is a cycle detected, so that it is still in order
-void rearrageEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]) {
+void rearrangeEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]) {
     edge_s tempEdge;
 
     for (int i = connectingIndex; i < edgesAdded-1; i++) {
