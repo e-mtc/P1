@@ -94,7 +94,12 @@ int main(void) {
     printf("Length of Christofides algorithm: %.2lf\n", christoLength);
     printf("Execution time of Christofides algorithm: %.2lf\n\n", cpu_time_used_christo);
 
-    printf("Christofides is %.2lf times longer than Brute-force.\n", christoLength/bruteLength);
+    if (christoLength < bruteLength) {
+        printf("Brute-force is %.2lf times longer than Christofides.\n", bruteLength/christoLength);
+    }
+    else {
+        printf("Christofides is %.2lf times longer than Brute-force.\n", christoLength/bruteLength);
+    }
     printf("Christofides is %.2lf times faster than Brute-force.\n", cpu_time_used_brute/cpu_time_used_christo);
 
     return EXIT_SUCCESS;
