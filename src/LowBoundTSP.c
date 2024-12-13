@@ -246,7 +246,7 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
                             perfectMatching[j].sourceBomb = tempMine;
                         }
 
-                        rearrageEulerian(k, eAdded, eurelianSize, eurelianCircuit);
+                        rearrangeEulerian(k, eAdded, eurelianSize, eurelianCircuit);
 
                         perfectMatching[j].included = true;
                         eurelianCircuit[eAdded] = perfectMatching[j];
@@ -275,7 +275,7 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
                                 MST[j].sourceBomb = tempMine;
                             }
 
-                            rearrageEulerian(k, eAdded, eurelianSize, eurelianCircuit);
+                            rearrangeEulerian(k, eAdded, eurelianSize, eurelianCircuit);
 
                             MST[j].included = true;
                             eurelianCircuit[eAdded] = MST[j];
@@ -294,7 +294,7 @@ void eulerianCircuit(int perfectSize, int MSTSize, int eurelianSize, edge_s MST[
 }
 
 //Rearranges the eulerian tour if there is a cycle detected, so that it is still in order
-void rearrageEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]) {
+void rearrangeEulerian(int connectingIndex, int edgesAdded, int eurelianSize, edge_s eurelianCircuit[eurelianSize]) {
     edge_s tempEdge;
 
     for (int i = connectingIndex; i < edgesAdded-1; i++) {
@@ -443,6 +443,40 @@ void tspToMineArray(int bombAmount, edge_s eurelianShortcut[bombAmount], mine_s 
     }
 }
 
+// Find the index of the desired start point(mine) in the array containing the calculated path (tsp solution)
+int findDesiredStartIndex(int bombAmount, mine_s sortedBombs[bombAmount])
+{
+    int startIndex = 0;
+
+    for (int i = 0; i < bombAmount; i++) {
+        if (sortedBombs[i].mineNumber == 0) {
+            startIndex = i;
+            break;
+        }
+    }
+
+    return startIndex;
+}
+
+// Rearranging mine_s struct array such that the start point is the first mine
+void rearrangeArray(int bombAmount, mine_s sortedBombs[bombAmount])
+{
+    int startIndex = findDesiredStartIndex(bombAmount, sortedBombs);
+
+    mine_s tempMine;
+
+    for (int i = startIndex; i > 0; i--)
+    {
+        tempMine = sortedBombs[0];
+
+        for (int j = 0; j < bombAmount-1; j++)
+        {
+            sortedBombs[j] = sortedBombs[j+1];
+        }
+        sortedBombs[bombAmount-1] = tempMine;
+    }
+}
+
 //Main function to find the solution of TSP using Christofides
 void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[bombAmount]) {
     //Finds the amount of edges in edgeArray
@@ -479,4 +513,7 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
 
     //Convert eurelianShortcut[] to mine_s struct array so that it can be used for printing - Make the changes in sortedArray[]
     tspToMineArray(bombAmount, eurelianShortcut, sortedBombs);
+
+    // Rearranging mine_s struct array such that the start point is the first mine
+    rearrangeArray(bombAmount, sortedBombs);
 }

@@ -59,11 +59,16 @@ int main(void) {
     printf("%lf\n", bruteLength);
     end = clock();
     double cpu_time_used_brute = (end - start) / CLOCKS_PER_SEC;
-    printf("Execution time: %f seconds\n\n", cpu_time_used_brute);
+    printf("Execution time: %f seconds\n\n\n", cpu_time_used_brute);
+
+
+
 
     //------------CHRISTOFIDES----------------
+    printf("-----------------CHRISTOFIDES---------------\n");
+    printf("Start point: (%u,%u)\n", shortest[0].x, shortest[0].y);
+
     start = clock();
-    printf("-----------------CHRISTOFIDES---------------");
     mine_s minefieldChristo[mineCount];
     christofides(mineCount, minefield, minefieldChristo);
 
@@ -72,6 +77,7 @@ int main(void) {
     for (unsigned int i = 0; i < mineCount; i++) {
         printf("%c: (%u,%u)\n", i + 65, minefieldChristo[i].x, minefieldChristo[i].y);
     }
+    printf("A: (%u,%u) - Returning to starting point (optional, not included in path length)\n", minefieldChristo[0].x, minefieldChristo[0].y);
     printf("\n");
 
     /* Including/calling Anas' version of VisualOutput */
