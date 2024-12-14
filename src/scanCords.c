@@ -13,7 +13,7 @@
 unsigned int countMines(char *filename) {
     // Adding a path specifier "../" to filename
     char filepath[MAX_STR_LNGTH];
-    sprintf(filepath, "src/%s", filename);
+    sprintf(filepath, "Datafolder/%s", filename);
 
     // Declaring and initialising file pointer
     FILE* file = fopen(filepath, "r");
@@ -46,7 +46,7 @@ unsigned int countMines(char *filename) {
 void coordinatesScanInit(mine_s* mines, unsigned int mineCount, char* filename) {
     // Adding a path specifier "../" to filename
     char filepath[MAX_STR_LNGTH];
-    sprintf(filepath, "src/%s", filename);
+    sprintf(filepath, "Datafolder/%s", filename);
 
     // Declaring and initialising file pointer
     FILE* file = fopen(filepath, "r");
