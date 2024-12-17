@@ -468,6 +468,13 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     edge_s perfectMatch[perfectSize];
     perfectMatching(oddCount, perfectSize, oddVertices, perfectMatch);
 
+    //TestPrint
+    printf("\n\n\n---------MATCHING TEST---------\n");
+    printf("\nPerfect matches:\n");
+    for (int i = 0; i < perfectSize; i++) {
+        printf("%d -- %d   %d, %d -- %d, %d\n", perfectMatch[i].sourceBomb.mineNumber, perfectMatch[i].destinationBomb.mineNumber, perfectMatch[i].sourceBomb.x, perfectMatch[i].sourceBomb.y, perfectMatch[i].destinationBomb.x, perfectMatch[i].destinationBomb.y);
+    }
+
 
     //Step 4: Create Eurelian Circuit
     int eurelianSize = perfectSize+bombAmount-1;
@@ -476,7 +483,7 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
 
     //TestPrint
     printf("\n\n\n---------EULERIAN TEST---------\n");
-    printf("\nEulerian Shortcut:\n");
+    printf("\nEulerian Circuit:\n");
     for (int i = 0; i < eurelianSize; i++) {
         printf("%d -- %d   %d, %d -- %d, %d\n", eurelianC[i].sourceBomb.mineNumber, eurelianC[i].destinationBomb.mineNumber, eurelianC[i].sourceBomb.x, eurelianC[i].sourceBomb.y, eurelianC[i].destinationBomb.x, eurelianC[i].destinationBomb.y);
     }
