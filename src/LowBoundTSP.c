@@ -491,7 +491,7 @@ void christofides(int bombAmount, mine_s bombs[bombAmount], mine_s sortedBombs[b
     double minCost = 0;
     makeMST(edgeAmount, bombAmount, &minCost, edgeArray, MST, bombs);
 
-    //Step 2: Find nodes with odd degree (Amount of edges)
+    //Step 2: Find vertices with odd degree (Amount of edges)
     int oddCount = findOddAmount(bombAmount, bombs);
     mine_s oddVertices[oddCount];
     findOddVertices(bombAmount, oddCount, bombs, oddVertices);

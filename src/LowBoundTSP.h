@@ -1,6 +1,7 @@
 #include "scanCords.h"
 
-typedef struct // Edge between two vertices moving from vertex 1 to vertex 2
+// Edge between two vertices moving from vertex 1 to vertex 2
+typedef struct
 {
     mine_s sourceBomb; // Vertex 1
     mine_s destinationBomb; // Vertex 2
