@@ -9,6 +9,7 @@
 #include "bruteforce.h"
 #include "LowBoundTSP.h"
 
+//Run fuction for main
 void run() {
     unsigned int row = 0, column = 0;
     char filename[MAX_STR_LNGTH];
@@ -46,6 +47,7 @@ void run() {
     }
 }
 
+//Gets and defines filename with the .txt added behind
 void getFilename(char filename[MAX_STR_LNGTH]) {
     char tempFilename[MAX_STR_LNGTH-4];
 
@@ -59,6 +61,7 @@ void getFilename(char filename[MAX_STR_LNGTH]) {
     sprintf(filename, "%s.txt", tempFilename);
 }
 
+//Scans coordinates from given filename
 void scanCords (unsigned int *row, unsigned int *column, unsigned int *mineCount, mine_s minefield[], char filename[MAX_STR_LNGTH]) {
 
     coordinatesScanInit(minefield, *mineCount, filename);
@@ -72,6 +75,7 @@ void scanCords (unsigned int *row, unsigned int *column, unsigned int *mineCount
     printf("\n");
 }
 
+//Initiates and times the bruteforce algorithm whilst printing its results
 void initiateBruteforce(unsigned int row, unsigned int column, unsigned int mineCount, double *bruteLength, double *cpuTimeUsedBrute, mine_s minefield[mineCount]) {
     // -----------------BRUTEFORCE---------------
     double start = clock();
@@ -101,7 +105,7 @@ void initiateBruteforce(unsigned int row, unsigned int column, unsigned int mine
     printf("Execution time: %f seconds\n\n\n", *cpuTimeUsedBrute);
 }
 
-
+//Initiates and times the Christofides algorithm whilst printing its results
 void initiateChristofides(unsigned int row, unsigned int column, unsigned int mineCount, double *christoLength, double *cpuTimeUsedChristo, mine_s minefield[mineCount], mine_s minefieldChristo[mineCount]) {
     //------------CHRISTOFIDES----------------
     printf("-----------------CHRISTOFIDES---------------\n");
@@ -130,6 +134,8 @@ void initiateChristofides(unsigned int row, unsigned int column, unsigned int mi
     printf("Execution time: %f seconds\n\n", *cpuTimeUsedChristo);
 }
 
+
+//Compares the two formerly run algorithms' runtime and results
 void compareAlgorithms(double bruteLength, double christoLength, double cpuTimeUsedBrute, double cpuTimeUsedChristo) {
     //-------END OF ALGORITHMS----------
     printf("-----------------SUMMARY---------------");
@@ -147,5 +153,4 @@ void compareAlgorithms(double bruteLength, double christoLength, double cpuTimeU
         printf("Christofides is %.2lf times longer than Brute-force.\n", christoLength/bruteLength);
     }
     printf("Christofides is %.2lf times faster than Brute-force.\n", cpuTimeUsedBrute/cpuTimeUsedChristo);
-
 }
