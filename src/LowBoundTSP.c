@@ -423,15 +423,15 @@ int returningToUsedVertex (int shortcutSize, int edgesAdded, edge_s cosideredVer
 //Creates a shortcut in the eurelian circuit so that the edges do not visit same vertices twice
 void createShortcut(int eurelianSize, int edgesAdded, edge_s *newEdge, edge_s eurelianCircuit[eurelianSize], edge_s consideredEdge) {
 
-        for (int i = 0; i < eurelianSize; i++) {
-            if (consideredEdge.destinationBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber && eurelianCircuit[i].included == false) {
-                newEdge->sourceBomb = consideredEdge.sourceBomb;
-                newEdge->destinationBomb = eurelianCircuit[i].destinationBomb;
-                newEdge->distanceBetween = calculateDistance(newEdge->sourceBomb, newEdge->destinationBomb);
-                newEdge->included = true;
-                break;
-            }
+    for (int i = 0; i < eurelianSize; i++) {
+        if (consideredEdge.destinationBomb.mineNumber == eurelianCircuit[i].sourceBomb.mineNumber && eurelianCircuit[i].included == false) {
+            newEdge->sourceBomb = consideredEdge.sourceBomb;
+            newEdge->destinationBomb = eurelianCircuit[i].destinationBomb;
+            newEdge->distanceBetween = calculateDistance(newEdge->sourceBomb, newEdge->destinationBomb);
+            newEdge->included = true;
+            break;
         }
+    }
 }
 
 //Convert tsp solution from edge_s array to mine_s array so that it can be printed
